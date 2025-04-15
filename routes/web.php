@@ -85,17 +85,18 @@ Route::middleware(['auth', 'dynamic.permission'])->group(function () {
 use App\Http\Controllers\FinishedGoodController;
 // Route::middleware(['auth', 'dynamic.permission'])->group(function () {
 Route::middleware(['auth', 'dynamic.permission'])->group(function () {
-    Route::get('finished-goods', [FinishedGoodController::class, 'index'])->name('finished-goods.index');  
-    Route::get('finished-goods/create', [FinishedGoodController::class, 'create'])->name('finished-goods.create');  
-    Route::post('finished-goods', [FinishedGoodController::class, 'store'])->name('finished-goods.store');  
+    Route::get('games', [FinishedGoodController::class, 'index'])->name('games.index');  
+    Route::get('games/create', [FinishedGoodController::class, 'create'])->name('games.create');  
+    Route::post('games', [FinishedGoodController::class, 'store'])->name('games.store');  
 
-    Route::get('finished-goods/{id}/edit', [FinishedGoodController::class, 'edit'])->name('finished-goods.edit');  
-    Route::put('finished-goods/{id}', [FinishedGoodController::class, 'update'])->name('finished-goods.update');  
-    Route::delete('finished-goods/{id}', [FinishedGoodController::class, 'destroy'])->name('finished-goods.destroy');  
-    Route::get('finished-goods/{id}/view', [FinishedGoodController::class, 'view'])->name('finished-goods.view');
-    Route::get('finished-goods/{id}/suspend', [FinishedGoodController::class, 'suspend'])->name('finished-goods.suspend');
-    Route::get('finished-goods/import', [FinishedGoodController::class, 'importForm'])->name('finished-goods.import');
-    Route::post('finished-goods/import', [FinishedGoodController::class, 'import'])->name('finished-goods.import-store');
+    Route::get('games/{id}/edit', [FinishedGoodController::class, 'edit'])->name('games.edit');  
+    Route::put('games/{id}', [FinishedGoodController::class, 'update'])->name('games.update');  
+    Route::delete('games/{id}', [FinishedGoodController::class, 'destroy'])->name('games.destroy');  
+    Route::delete('games/{id}', [FinishedGoodController::class, 'delete'])->name('games.delete');  
+    Route::get('games/{id}/view', [FinishedGoodController::class, 'view'])->name('games.view');
+    Route::get('games/{id}/suspend', [FinishedGoodController::class, 'suspend'])->name('games.suspend');
+    Route::get('games/import', [FinishedGoodController::class, 'importForm'])->name('games.import');
+    Route::post('games/import', [FinishedGoodController::class, 'import'])->name('games.import-store');
     });
 use App\Http\Controllers\PlantController;
 // Route::middleware(['auth', 'dynamic.permission'])->group(function () {
@@ -114,13 +115,13 @@ Route::middleware(['auth', 'dynamic.permission'])->group(function () {
     Route::get('plants/{id}/view', [PlantController::class, 'view'])->name('plants.view');
     Route::post('updateassignplant/', [PlantController::class, 'updateassignplant'])->name('plants.updateassignplant');
     Route::get('plants/{id}/suspend', [PlantController::class, 'suspend'])->name('plants.suspend');
-    Route::get('/plants/finished-goods', [PlantController::class, 'finishedGoodsList'])->name('plants.finishedGoodsList');
+    Route::get('/plants/games', [PlantController::class, 'finishedGoodsList'])->name('plants.finishedGoodsList');
     Route::get('/plants/raw-materials', [PlantController::class, 'rawMaterialsList'])->name('plants.rawMaterialsList');
-    Route::get('/plants/finished-goods/{fg}/edit', [PlantController::class, 'editFgList'])->name('plants.editFgList');
-    Route::put('/plants/finished-goods/{fg}', [PlantController::class, 'updateFgList'])->name('plants.updateFgList');
-    Route::get('/plants/finished-goods/create', [PlantController::class, 'createfg'])->name('plants.createfg');
-    Route::get('/plants/finished-goods/{id}/view', [PlantController::class, 'viewfg'])->name('plants.viewfg');
-    Route::post('/plants/finished-goods/', [PlantController::class, 'storefg'])->name('plants.storefg');
+    Route::get('/plants/games/{fg}/edit', [PlantController::class, 'editFgList'])->name('plants.editFgList');
+    Route::put('/plants/games/{fg}', [PlantController::class, 'updateFgList'])->name('plants.updateFgList');
+    Route::get('/plants/games/create', [PlantController::class, 'createfg'])->name('plants.createfg');
+    Route::get('/plants/games/{id}/view', [PlantController::class, 'viewfg'])->name('plants.viewfg');
+    Route::post('/plants/games/', [PlantController::class, 'storefg'])->name('plants.storefg');
     Route::get('/plants/raw-materials/{rm}/edit', [PlantController::class, 'editRmList'])->name('plants.editRmList');
     Route::put('/plants/raw-materials/{rm}', [PlantController::class, 'updateRmList'])->name('plants.updateRmList');
     Route::get('/plants/raw-materials/create', [PlantController::class, 'createrm'])->name('plants.createrm');
@@ -131,8 +132,8 @@ Route::middleware(['auth', 'dynamic.permission'])->group(function () {
 
 Route::get('/plants/raw-materials/import', [PlantController::class, 'importrmForm'])->name('plants.importrm');
 Route::post('/plants/raw-materials/import', [PlantController::class, 'importrm'])->name('plants.importrm-store');
-Route::get('/plants/finished-goods/import', [PlantController::class, 'importfgForm'])->name('plants.importfg');
-Route::post('/plants/finished-goods/import', [PlantController::class, 'importfg'])->name('plants.importfg-store');
+Route::get('/plants/games/import', [PlantController::class, 'importfgForm'])->name('plants.importfg');
+Route::post('/plants/games/import', [PlantController::class, 'importfg'])->name('plants.importfg-store');
 
 use App\Http\Controllers\ClientController;
     // Route::middleware(['auth'])->group(function () {

@@ -314,7 +314,7 @@ class PurchaseOrdersReleaseController extends Controller
                 'purpose'              => 'low_stock',
                 'status'            => 'unread',
                 'notification_text' => 'Purchase Order with PO Number '.$purchaseOrder->po_number . ' for Plant ' . $purchaseOrder->plant->plant_name . ' has insuffient FG.',
-                'notification_url'  => 'plants/finished-goods',
+                'notification_url'  => 'plants/games',
             ]);
         }
 

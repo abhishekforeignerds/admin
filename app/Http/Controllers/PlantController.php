@@ -1137,7 +1137,7 @@ class PlantController extends Controller
                 'purpose'              => 'completed',
                 'status'            => 'unread',
                 'notification_text' => 'Finish Goods Imported successfully.',
-                'notification_url'  => 'plants/finished-goods',
+                'notification_url'  => 'plants/games',
             ]);
 
         } catch (ValidationException $e) {
@@ -1153,7 +1153,7 @@ class PlantController extends Controller
                 'purpose'              => 'completed',
                 'status'            => 'unread',
                 'notification_text' => 'Finish Goods Import was unsuccessfull.',
-                'notification_url'  => 'plants/finished-goods',
+                'notification_url'  => 'plants/games',
             ]);
             return redirect()->back()
                 ->withErrors($e->errors())

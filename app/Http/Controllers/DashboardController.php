@@ -20,6 +20,8 @@ use App\Models\Plant;
 use App\Models\Notification;
 use App\Models\User;
 use App\Models\Users;
+use App\Models\Game;
+use App\Models\GameResults;
 
 use Carbon\Carbon;
 
@@ -38,6 +40,11 @@ class DashboardController extends Controller
 
         $currentUser = User::where('id', auth()->id())->first();
         $normalUsers = Users::all()->count();
+        $games = Game::all()->count();
+        $totalBet = GameResults::sum('bet');
+        $totalWin = GameResults::sum('win_value');
+        $gameResults = GameResults::with(['client', 'games'])->get()->groupBy('game_id');
+        // $results = GameResult::with('user')->get()->groupBy('game_id');
 
         $plant_id = $currentUser->plant_assigned;
         $allPlants = Plant::all()->count();
@@ -171,7 +178,7 @@ class DashboardController extends Controller
 
         return Inertia::render('Dashboard', 
         [
-            'orders' => $purchaseOrders,
+            'gameResults' => $gameResults,
             'productionPos' => $productionPos,
             'vendorpurchaseOrders' => $vendorpurchaseOrders,
             'notifications' => $notifications,
@@ -217,6 +224,9 @@ class DashboardController extends Controller
             'currentcancelledVendorOrders'=> $currentcancelledVendorOrders,
             'currentInvoiceVendorpurchaseOrderscount'=> $currentInvoiceVendorpurchaseOrderscount,
             'normalUsers'=> $normalUsers,
+            'games'=> $games,
+            'totalBet'=> $totalBet,
+            'totalWin'=> $totalWin,
             
         ]
         

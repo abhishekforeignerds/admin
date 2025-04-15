@@ -39,8 +39,8 @@ const RecentNotifications = ({ notifications, showViewAll = true }) => {
     userRoles[0] === "Super Admin"
       ? notifications
       : notifications.filter(
-          (notification) => notification.to_id === auth.user.id
-        );
+        (notification) => notification.to_id === auth.user.id
+      );
 
   // Tab-wise filtering logic
   const getFilteredNotifications = () => {
@@ -71,11 +71,10 @@ const RecentNotifications = ({ notifications, showViewAll = true }) => {
           <button
             key={index}
             onClick={() => setActiveTab(tab)}
-            className={`py-2 px-2 text-sm font-semibold focus:outline-none ${
-              activeTab === tab
+            className={`py-2 px-2 text-sm font-semibold focus:outline-none ${activeTab === tab
                 ? "border-b-2 border-red-hover text-red-500"
                 : "text-gray-600 hover:text-red-500"
-            }`}
+              }`}
           >
             {tab}
           </button>

@@ -20,7 +20,7 @@ export default function Create({ message, rawMaterials }) {
         // Validate raw materials used field
 
 
-        post(route('finished-goods.store'));
+        post(route('games.store'));
     };
 
     return (
@@ -32,9 +32,9 @@ export default function Create({ message, rawMaterials }) {
             <Head title="Create Finished Good" />
             <div className="main-content-container sm:ml-52">
                 <div className="mx-auto py-6 flex justify-between flex-col md:flex-row gap-2">
-                    <p className='flex flex-wrap'><Link href={route('dashboard')}>Dashboard</Link>  <FiChevronRight size={24} color="black" /> <Link href={route('finished-goods.index')}>Inventory Management</Link>  <FiChevronRight size={24} color="black" /> <span className='text-red'>Add New Game</span></p>
+                    <p className='flex flex-wrap'><Link href={route('dashboard')}>Dashboard</Link>  <FiChevronRight size={24} color="black" /> <Link href={route('games.index')}>Games Management</Link>  <FiChevronRight size={24} color="black" /> <span className='text-red'>Add New Game</span></p>
                     <Link
-                        href={route('finished-goods.index')}   // Use the correct path to navigate to the users page
+                        href={route('games.index')}   // Use the correct path to navigate to the users page
                         className="border border-red py-1 px-14 text-red rounded max-w-max"
                     >
                         Back

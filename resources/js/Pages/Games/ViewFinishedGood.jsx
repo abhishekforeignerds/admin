@@ -31,10 +31,10 @@ export default function Edit({ finishedGood }) {
 
             <div className="main-content-container sm:ml-52">
                 <div className="mx-auto py-6 flex justify-between flex-col md:flex-row gap-2">
-                    <p className='flex flex-wrap'><Link href={route('dashboard')}>Dashboard</Link>  <FiChevronRight size={24} color="black" /> <Link href={route('finished-goods.index')}>Inventory Management</Link> <FiChevronRight size={24} color="black" /> <span className='text-red'>View Finish Goods</span></p>
+                    <p className='flex flex-wrap'><Link href={route('dashboard')}>Dashboard</Link>  <FiChevronRight size={24} color="black" /> <Link href={route('games.index')}>Games Management</Link> <FiChevronRight size={24} color="black" /> <span className='text-red'>View Finish Goods</span></p>
 
                     <Link
-                        href={route('finished-goods.index')}   // Use the correct path to navigate to the users page
+                        href={route('games.index')}   // Use the correct path to navigate to the users page
                         className="border border-red py-1 px-14 text-red rounded max-w-max"
                     >
                         Back
@@ -115,7 +115,7 @@ export default function Edit({ finishedGood }) {
                                 </div>
                             </div>
                             <Link
-                                href={route('finished-goods.index')}
+                                href={route('games.index')}
                                 className=" block max-w-max mt-4 px-4 py-2 font-normal capitalize text-sm text-white bg-red rounded hover:bg-red-800"
                             >
                                 Back to Finished Goods

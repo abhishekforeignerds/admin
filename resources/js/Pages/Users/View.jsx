@@ -130,7 +130,7 @@ export default function View({ users, statusCounts }) {
                                             <th className="px-2 py-3 border-b text-red text-left text-sm">Mobile</th>
                                             <th className="px-2 py-3 border-b text-red text-left text-sm">Role</th>
                                             <th className="px-2 py-3 border-b text-red text-left text-sm">Status</th>
-                                            <th className="px-2 py-3 border-b text-red text-left text-sm">Assigned Plant</th>
+                                            {/* <th className="px-2 py-3 border-b text-red text-left text-sm">Assigned Plant</th> */}
                                             <th className="px-2 py-3 border-b text-red text-left text-sm">Actions</th>
                                         </tr>
                                     </thead>
@@ -146,9 +146,9 @@ export default function View({ users, statusCounts }) {
                                                         {getStatusText(user.status)}
                                                     </span>
                                                 </td>
-                                                <td className="px-2 py-3 border-b text-sm">
+                                                {/* <td className="px-2 py-3 border-b text-sm">
                                                     {user.plant && user.plant.plant_name ? user.plant.plant_name : 'No Plant Assigned'}
-                                                </td>
+                                                </td> */}
                                                 <td className="px-2 py-3 border-b text-sm relative">
                                                     <button
                                                         type="button"

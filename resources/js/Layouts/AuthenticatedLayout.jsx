@@ -39,10 +39,10 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
                 {
                     // No title provided; the header won’t show.
                     links: [
-                        { name: "View Plant", icon: <BuildingOfficeIcon className="w-6 h-6" />, link: "/plants" },
-                        { name: "Users List", icon: <UsersIcon className="w-6 h-6" />, link: "/users" },
-                        { name: "Purchase Orders", icon: <BiCartAdd className="w-6 h-6" />, link: "/client-purchase-orders/" },
-                        { name: "View Reports", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/reports/inventory" },
+
+                        { name: "Users List", icon: <UsersIcon className="w-6 h-6" />, link: "/clients" },
+                        { name: "Games List", icon: <BiCartAdd className="w-6 h-6" />, link: "/games/" },
+
                     ],
                 },
             ];
@@ -169,7 +169,7 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
                 {
                     links: [
                         { name: "View Purchase Orders", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/client-purchase-orders/" },
-                        { name: "View Inventory", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/finished-goods/" },
+                        { name: "View Inventory", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/games/" },
                     ],
 
                 },
@@ -183,7 +183,7 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
                 {
                     links: [
 
-                        { name: "Manage Inventory", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "plants/finished-goods/" },
+                        { name: "Manage Inventory", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "plants/games/" },
                     ],
 
                 },
@@ -219,16 +219,15 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
             ];
         } else if (
             currentPath.startsWith('/inventory') ||
-            currentPath.startsWith('/finished-goods') ||
+            currentPath.startsWith('/games') ||
             currentPath.startsWith('/raw-materials')
         ) {
             return [
                 {
-                    title: "INVENTORY MANAGEMENT",
+                    title: "GAMES MANAGEMENT",
                     links: [
-                        { name: "Finish Goods List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/finished-goods" },
-                        { name: "Raw Materials List", icon: <ChartBarIcon className="w-6 h-6" />, link: "/raw-materials" },
-                        { name: "RM for FG", icon: <ChartBarIcon className="w-6 h-6" />, link: "/inventory" },
+                        { name: "Games List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/games" },
+
                     ],
                 },
             ];
@@ -245,7 +244,7 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
                         { name: "Plants List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/plants" },
                         { name: "Add New Plant", icon: <ChartBarIcon className="w-6 h-6" />, link: "/plants/create" },
                         { name: "Assign Plant Head", icon: <BsPersonGear className="w-6 h-6" />, link: "/assign-plants" },
-                        { name: "Finish Goods List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/plants/finished-goods" },
+                        { name: "Finish Goods List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/plants/games" },
                         { name: "Raw Materials List", icon: <ChartBarIcon className="w-6 h-6" />, link: "/plants/raw-materials" },
                     ],
                 },
@@ -260,14 +259,14 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
                     title: "INVENTORY MANAGEMENT",
                     links: [
 
-                        { name: "Finish Goods List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/plants/finished-goods" },
+                        { name: "Finish Goods List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/plants/games" },
                         { name: "Raw Materials List", icon: <ChartBarIcon className="w-6 h-6" />, link: "/plants/raw-materials" },
                     ],
                 },
             ];
         }
         else if (
-            (currentPath.startsWith('/plants/finished-goods') || currentPath.startsWith('/plants/raw-materials')) &&
+            (currentPath.startsWith('/plants/games') || currentPath.startsWith('/plants/raw-materials')) &&
             userRoles[0] === 'Production Manager'
         ) {
             return [
@@ -275,7 +274,7 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
                     title: "INVENTORY MANAGEMENT",
                     links: [
 
-                        { name: "Finish Goods List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/plants/finished-goods" },
+                        { name: "Finish Goods List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/plants/games" },
                         { name: "Raw Materials List", icon: <ChartBarIcon className="w-6 h-6" />, link: "/plants/raw-materials" },
                     ],
                 },
@@ -378,17 +377,12 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
         ) {
             return [
                 {
-                    title: "Client Management",
+                    title: "Player Management",
                     links: [
-                        { name: "Client List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/clients" },
+                        { name: "Players List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/clients" },
                     ],
                 },
-                {
-                    title: "Vendor Management",
-                    links: [
-                        { name: "Vendor List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/vendors" },
-                    ],
-                },
+
             ];
         }
         else if (
@@ -445,7 +439,7 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
         } else if (currentPath.startsWith('/clients')) {
             return "Client Management";
         }
-        else if (currentPath.startsWith('/finished-goods')) {
+        else if (currentPath.startsWith('/games')) {
             return "INVENTORY MANAGEMENT";
         } else if (currentPath.startsWith('/raw-materials')) {
             return "INVENTORY MANAGEMENT";

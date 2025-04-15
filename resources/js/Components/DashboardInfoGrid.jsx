@@ -72,7 +72,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.allFinishedGoods || 0,
         bgColor: "#FCFFD2",
         statusInfo: " ",
-        link: route("finished-goods.index"),
+        link: route("games.index"),
       },
       {
         img: img7,
@@ -123,7 +123,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.completedpurchaseOrders || 0,
         bgColor: "#E4FFD2",
         statusInfo: "Pending",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img9,
@@ -132,7 +132,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.schduledpurchaseOrders || 0,
         bgColor: "#D2E0FF",
         statusInfo: "Pending",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img10,
@@ -141,7 +141,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.activePurchaseOrders || 0,
         bgColor: "#D9D2FF",
         statusInfo: "Pending",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
 
     ],
@@ -153,7 +153,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.completedpurchaseOrders || 0,
         bgColor: "#E4FFD2",
         statusInfo: "Pending",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img9,
@@ -162,7 +162,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.schduledpurchaseOrders || 0,
         bgColor: "#D2E0FF",
         statusInfo: "Pending",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img10,
@@ -171,7 +171,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.activePurchaseOrders || 0,
         bgColor: "#D9D2FF",
         statusInfo: "Pending",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
 
     ],
@@ -192,7 +192,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.plantRawMaterialCount || 0,
         bgColor: "#D2E0FF",
         statusInfo: "",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img10,
@@ -201,7 +201,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: (statusCounts.allocatedRmTotal || 0) + ' Kgs',
         bgColor: "#D9D2FF",
         statusInfo: "to Production Floor",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img5,
@@ -210,7 +210,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.currentdispatchedOrders || 0,
         bgColor: "#D2F2FF",
         statusInfo: "Dispatches Today",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img6,
@@ -219,7 +219,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.productionInProgress || 0,
         bgColor: "#FCFFD2",
         statusInfo: "Orders in Progress",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img7,
@@ -228,7 +228,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.plantFinishGoodCount || 0,
         bgColor: "#D2FFDC",
         statusInfo: "",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
 
     ],
@@ -240,7 +240,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.currentallpurchaseOrders || 0,
         bgColor: "#E4FFD2",
         statusInfo: "Purchase Order",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img8,
@@ -249,7 +249,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.currentcompletedpurchaseOrders || 0,
         bgColor: "#D2E0FF",
         statusInfo: "",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img14,
@@ -258,7 +258,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: (statusCounts.currentpendingpurchaseOrders || 0),
         bgColor: "#D9D2FF",
         statusInfo: "to Production Floor",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img10,
@@ -267,7 +267,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.currentInProgressOrders || 0,
         bgColor: "#D2FFDC",
         statusInfo: "Dispatches Today",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img18,
@@ -276,7 +276,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.currentcancelledOrders || 0,
         bgColor: "#D2F2FF",
         statusInfo: "Orders in Progress",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img16,
@@ -285,7 +285,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: 0 || 0,
         bgColor: "#FCFFD2",
         statusInfo: "",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
 
     ],
@@ -297,7 +297,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.currentallVendorpurchaseOrders || 0,
         bgColor: "#E4FFD2",
         statusInfo: "Purchase Order",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img13,
@@ -306,7 +306,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.currentcompletedpurchaseOrders || 0,
         bgColor: "#D2E0FF",
         statusInfo: "",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img14,
@@ -315,7 +315,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: (statusCounts.currentpendingVendorpurchaseOrders || 0),
         bgColor: "#D9D2FF",
         statusInfo: "to Production Floor",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img15,
@@ -324,7 +324,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.currentcancelledVendorOrders || 0,
         bgColor: "#D2F2FF",
         statusInfo: "Dispatches Today",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img16,
@@ -333,7 +333,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.currentInvoiceVendorpurchaseOrderscount || 0,
         bgColor: "#FCFFD2",
         statusInfo: "Orders in Progress",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
       {
         img: img17,
@@ -342,7 +342,7 @@ const DashboardInfoGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.currentallVendorpurchaseOrders - statusCounts.currentInvoiceVendorpurchaseOrderscount || 0,
         bgColor: "#D2FFDC",
         statusInfo: "",
-        // link: route("finished-goods.index"),
+        // link: route("games.index"),
       },
 
     ],

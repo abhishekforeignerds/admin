@@ -47,7 +47,7 @@ class FinishedGoodController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'material_code' => 'required|string|unique:finished_goods,material_code',
+            'material_code' => 'required|integer',
             'material_name' => 'required',
             'hsn_sac_code' => 'required',
         ]);
@@ -75,26 +75,26 @@ class FinishedGoodController extends Controller
             'notification_url'  => 'finished-goods',
         ]);
         return redirect()
-        ->route('finished-goods.index')
+        ->route('games.index')
         ->with('success', 'New Game added successfully.');
 
     }
 
     public function edit($id)
     {
-        $finishedGood = FinishedGood::findOrFail($id);
-        $rawMaterials =  RawMaterial::where('status', 'available')->get();
-        return Inertia::render('FinishedGoods/Edit', [
-            'finishedGood' => $finishedGood,
-            'rawMaterials' => $rawMaterials,
+        $game = Game::findOrFail($id);
+    
+        return Inertia::render('Games/Edit', [
+            'game' => $game,
         ]);
     }
+    
 
     public function view($id)
     {
-        $finishedGood = FinishedGood::findOrFail($id);
+        $finishedGood = Game::findOrFail($id);
 
-        return Inertia::render('FinishedGoods/ViewFinishedGood', [
+        return Inertia::render('Games/ViewFinishedGood', [
             'finishedGood' => $finishedGood,
         ]);
     }
@@ -102,26 +102,27 @@ class FinishedGoodController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'material_code' => 'required|unique:finished_goods,material_code,' . $id,
+            'material_code' => 'required|integer',
             'material_name' => 'required',
-            // 'hsn_sac_code' => 'required|unique:finished_goods,hsn_sac_code,' . $id,
-            'initial_stock_quantity' => 'required|integer',
-            'unit_of_measurement' => 'required|in:pieces',
-            'status' => 'required',
-            'reorder_level' => 'required',
-            // 'buffer_stock' => 'required',
+            'hsn_sac_code' => 'required',
+            'game_name' => 'nullable|string',
+            'game_type' => 'nullable|string',
+            'game_category' => 'nullable|string',
         ]);
-        if ($request->initial_stock_quantity == 0) {
-            $status = 'unavailable';
-        } else if ($request->initial_stock_quantity < $request->reorder_level) {
-            $status = 'low_stock';
-        } else if ($request->initial_stock_quantity > $request->reorder_level) {
-            $status = 'available';
-        } 
-        $validated['status'] = $status;
-      $finishedGood = FinishedGood::findOrFail($id);
-   
-        $finishedGood->update($validated);
+
+        $game = Game::findOrFail($id);
+
+        $game->update([
+            'material_code'   => $validated['material_code'],
+            'game_spin_time'  => $validated['material_code'],
+            'material_name'   => $validated['material_name'],
+            'maximum_bet'     => $validated['material_name'],
+            'hsn_sac_code'    => $validated['hsn_sac_code'],
+            'min_bet'         => $validated['hsn_sac_code'],
+            'game_name'       => $request->game_name,
+            'game_type'       => $request->game_type,
+            'game_category'   => $request->game_category,
+        ]);
 
         $from_id = auth()->id();
         $superAdmin = User::whereHas('roles', function ($query) {
@@ -130,16 +131,17 @@ class FinishedGoodController extends Controller
 
         Notification::create([
             'from_id'           => $from_id,
-            'to_id'             => $superAdmin->id ??  1,
+            'to_id'             => $superAdmin->id ?? 1,
             'type'              => 'updated',
-            'purpose'              => 'completed',
+            'purpose'           => 'completed',
             'status'            => 'unread',
-            'notification_text' => 'Finished Good Updated successfully.',
-            'notification_url'  => 'finished-goods',
+            'notification_text' => 'Game updated successfully.',
+            'notification_url'  => 'games',
         ]);
 
-        return redirect()->route('finished-goods.index')->with('success', 'Finished Good updated successfully.');
+        return redirect()->route('games.index')->with('success', 'Game updated successfully.');
     }
+
 
     public function destroy(FinishedGood $finishedGood)
     {
@@ -158,7 +160,7 @@ class FinishedGoodController extends Controller
             'notification_text' => 'Finished Good Deleted successfully.',
             'notification_url'  => 'finished-goods',
         ]);
-        return redirect()->route('finished-goods.index')->with('success', 'Finished Good deleted successfully.');
+        return redirect()->route('games.index')->with('success', 'Finished Good deleted successfully.');
     }
 
     public function suspend($id) 
@@ -184,7 +186,7 @@ class FinishedGoodController extends Controller
         ]);
     
         // Redirect back with a success message
-        return redirect()->route('finished-goods.index')->with('success', 'Finished Good deleted successfully.');
+        return redirect()->route('games.index')->with('success', 'Finished Good deleted successfully.');
     }
     
     public function importForm()
@@ -224,7 +226,7 @@ class FinishedGoodController extends Controller
                 ->withInput();
         }
     
-        return redirect()->route('finished-goods.index')
+        return redirect()->route('games.index')
             ->with('success', 'Finished Goods imported successfully.');
     }
     

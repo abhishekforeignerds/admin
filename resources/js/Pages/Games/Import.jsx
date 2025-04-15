@@ -17,7 +17,7 @@ export default function Import({ message }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('finished-goods.import-store'));
+        post(route('games.import-store'));
     };
     const resetFileInput = () => {
         if (fileInputRef.current) {
@@ -41,12 +41,12 @@ export default function Import({ message }) {
                     <p className='flex flex-wrap'>
                         <Link href={route('dashboard')}>Dashboard</Link>
                         <FiChevronRight size={24} color="black" />
-                        <Link href={route('finished-goods.index')}>Inventory Management</Link>
+                        <Link href={route('games.index')}>Games Management</Link>
                         <FiChevronRight size={24} color="black" />
                         <span className='text-red'>Import Finish Goods</span>
                     </p>
 
-                    <Link href={route('finished-goods.index')} className="border border-red py-1 px-14 text-red rounded max-w-max">
+                    <Link href={route('games.index')} className="border border-red py-1 px-14 text-red rounded max-w-max">
                         Back
                     </Link>
                 </div>

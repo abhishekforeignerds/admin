@@ -1,5 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
+import { Inertia } from '@inertiajs/inertia';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import DashboardStateGrid from '@/Components/DashboardStateGrid';
 import DashboardInfoGrid from '@/Components/DashboardInfoGrid';
@@ -22,8 +24,21 @@ import RecentClientorders from '@/Components/clientComponenet/RecentClientorders
 import RecentVendorOrdersSummery from '@/Components/vendorComponent/RecentVendorOrdersSummery';
 import PoUpdatesState from '@/Components/productionManagerComponents/PoUpdatesState';
 
-export default function Dashboard({ orders, vendorpurchaseOrders, statusCounts, notifications, ongoingProds, lowStockRawMaterialstable, purchaseorderstable, lowStockFinishGoodtable, productionsOrders, allocatedRmtable, productionPos, invoicesvendors }) {
+export default function Dashboard({ gameResults, vendorpurchaseOrders, statusCounts, notifications, ongoingProds, lowStockRawMaterialstable, purchaseorderstable, lowStockFinishGoodtable, productionsOrders, allocatedRmtable, productionPos, invoicesvendors }) {
+    const dashboardLinkRef = useRef(null);
+    useEffect(() => {
+        // Set up an interval to click the link every 10 seconds (10000 ms)
+        const intervalId = setInterval(() => {
+            // Check if the link ref exists and trigger a click
+            if (dashboardLinkRef.current) {
+                dashboardLinkRef.current.click();
+                console.log('Dashboard link was clicked.');
+            }
+        }, 120000);
 
+        // Clean up the interval when the component unmounts
+        return () => clearInterval(intervalId);
+    }, []);
     const { auth } = usePage().props;
     const user = usePage().props.auth.user;
     const userRoles = auth?.user?.roles || [];
@@ -40,6 +55,9 @@ export default function Dashboard({ orders, vendorpurchaseOrders, statusCounts, 
             <Head title="Dashboard" />
 
             <div className="main-content-container sm:ml-52">
+                <Link hidden ref={dashboardLinkRef} href="/dashboard">
+                    Go to Dashboard
+                </Link>
                 <div className="mx-auto py-6">
                     {userRoles[0] != 'Manager Imports' && (
                         <div className="overflow-hidden shadow-sm sm:rounded-lg">
@@ -62,16 +80,20 @@ export default function Dashboard({ orders, vendorpurchaseOrders, statusCounts, 
 
                                     {/* <PoUpdatesState /> */}
                                 </div>
+                                <RecentOrders gameResults={gameResults} />
                                 <div className='flex flex-col gap-4 md:flex-row md:flex-wrap lg:flex-nowrap'>
 
                                     <div className='flex flex-col gap-4 md:flex-row md:flex-wrap lg:flex-nowrap'>
                                         <div className='flex flex-col gap-4 md:flex-row md:flex-wrap lg:flex-nowrap'>
 
-                                            <RecentNotification notifications={notifications} />
+
                                         </div>
+
                                     </div>
+
                                     {/* <PoUpdatesState /> */}
                                 </div>
+                                <RecentNotification notifications={notifications} />
                             </div>
                             {/* <div><RecentVendorOrdersSummery orders={orders} /></div> */}
 

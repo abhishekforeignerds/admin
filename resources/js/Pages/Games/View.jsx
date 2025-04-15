@@ -58,20 +58,20 @@ export default function View({ games, statusCounts }) {
             <div className="main-content-container sm:ml-52">
                 <div className="mx-auto py-6">
                     <div className=''>
-                        <p className='flex flex-wrap'><Link href={route('dashboard')}>Dashboard</Link>  <FiChevronRight size={24} color="black" /> <Link href={route('finished-goods.index')}>Inventory Management</Link>  <FiChevronRight size={24} color="black" /> <span className='text-red'>Games List</span></p>
+                        <p className='flex flex-wrap'><Link href={route('dashboard')}>Dashboard</Link>  <FiChevronRight size={24} color="black" /> <Link href={route('games.index')}>Games Management</Link>  <FiChevronRight size={24} color="black" /> <span className='text-red'>Games List</span></p>
 
                         {/* Status Cards */}
                         <div className="flex my-6 flex-col gap-6 md:flex-row">
                             {/* total users */}
                             <ItemInfoDarkBlueCard svgIcon={totalFGandRMInventoryIcon} cardHeading='Total Games' description={statusCounts.allgames} />
                             {/* Active Users */}
-                            <ItemInfoDarkRedCard svgIcon={lowStockRawMaterialsIcon} cardHeading='Low Stock Alerts' description={statusCounts.lowStockgames} />
+                            <ItemInfoDarkRedCard svgIcon={lowStockRawMaterialsIcon} cardHeading='Inactive Games' description={statusCounts.lowStockgames || 0} />
                         </div>
                         <div className='flex gap-2 justify-end'>
                             <Link className='text-right bg-red px-8 py-2 rounded-md text-white block max-w-max mb-4'
-                                href={route('finished-goods.create')}>Add Item</Link>
+                                href={route('games.create')}>Add Item</Link>
                             <Link className='text-right bg-transparent px-4 py-2 rounded-md text-red max-w-max mb-4 border border-red flex gap-2'
-                                href={route('finished-goods.import')}>Upload File{uploadFileIcon}</Link>
+                                href={route('games.import')}>Upload File{uploadFileIcon}</Link>
                         </div>
                     </div>
                     {showFlash && flash.success && (

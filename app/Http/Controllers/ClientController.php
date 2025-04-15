@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\GameResults;
 use App\Models\Notification;
+use App\Models\Users;
 use App\Models\Plant;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,40 +16,17 @@ class ClientController extends Controller
     public function index(Request $request)
     {
     
-        $users = User::whereHas('roles', function ($query) {
-            $query->whereIn('name', ['Client']);
-        })->with(['roles', 'plant'])->get();
-        $activeUsers =User::whereHas('roles', function ($query) {
-            $query->where('name', 'Client');
-        })->where('status', 'active')->count();
-        $allUsers =  User::whereHas('roles', function ($query) {
-            $query->where('name', 'Client');
-        })->count();
-        $recentClients = User::whereHas('roles', function ($query) {
-            $query->where('name', 'Client');
-        })->where('created_at', '>=', now()->subDay())->count();
+        $users = Users::all();
 
-        $pendingUsers = User::whereHas('roles', function ($query) {
-            $query->where('name', 'Client');
-        })->where('status', 'pending_approval')->count();
-        $inactiveUsers = User::whereHas('roles', function ($query) {
-            $query->where('name', 'Client');
-        })->where('status', 'inactive')->count();
-        return Inertia::render('Clients/View', ['users' => $users,
-        'statusCounts' => [
-            'active' => $activeUsers,
-            'pending' => $pendingUsers,
-            'inactive' => $inactiveUsers,
-            'allUsers' => $allUsers,
-            'recentClients' => $recentClients,
-        ],]);
+        return Inertia::render('Players/View', ['users' => $users,
+        ]);
     }
 
     public function create()
     {
         $roles = Role::all();
         $plants =  Plant::where('status', 'active')->get();
-        return Inertia::render('Clients/Create', ['roles' => $roles, 'plants' => $plants]);
+        return Inertia::render('Players/Create', ['roles' => $roles, 'plants' => $plants]);
     }
 
     public function store(Request $request)
@@ -116,17 +94,16 @@ class ClientController extends Controller
         // echo '<pre>';
         // print_r($user);die;
     
-        return Inertia::render('Clients/Edit', ['client' => $user, 'roles' => $roles, 'plants' => $plants]);
+        return Inertia::render('Players/Edit', ['client' => $user, 'roles' => $roles, 'plants' => $plants]);
     }
       public function view($id)
     {
-        $user = User::with('roles')->findOrFail($id);
-        $roles = Role::all();
-        $plants =  Plant::where('status', 'active')->get();
+   
+        $gameResults = GameResults::with(['client', 'games'])->where('user_id', $id)->get()->groupBy('game_id');
         // echo '<pre>';
         // print_r($user);die;
     
-        return Inertia::render('Clients/Viewuser', ['user' => $user, 'roles' => $roles, 'plants' => $plants]);
+        return Inertia::render('Players/Viewuser', ['gameResults' => $gameResults]);
     }
 
    public function update(Request $request, $id)

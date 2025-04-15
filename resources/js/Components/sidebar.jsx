@@ -83,7 +83,7 @@ const Sidebar = () => {
                   <BsShop className="text-xl" />
                 </a>
               </Link>
-              <span className="tooltip">Client & Vendor</span>
+              <span className="tooltip">Players List</span>
             </div>
           )}
 
@@ -147,10 +147,10 @@ const Sidebar = () => {
             userPermissions.includes("view finished-goods")
           ) && (
               <div className="relative group">
-                <Link href={route("finished-goods.index")}>
+                <Link href={route("games.index")}>
                   <a
                     className={getSidebarLinkClass(
-                      (currentRoute === "finished-goods.index" ||
+                      (currentRoute === "games.index" ||
                         currentRoute === "raw-materials.index" ||
                         currentRoute.startsWith("inventory"))
                     )}
@@ -158,7 +158,7 @@ const Sidebar = () => {
                     <MdInventory className="text-xl" />
                   </a>
                 </Link>
-                <span className="tooltip">Inventory & Stock</span>
+                <span className="tooltip">Games Settings</span>
               </div>
             )}
           {(
