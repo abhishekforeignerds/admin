@@ -47,9 +47,9 @@ class FinishedGoodController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'material_code' => 'required|integer',
-            'material_name' => 'required',
-            'hsn_sac_code' => 'required',
+            'game_spin_time' => 'required|integer',
+            'min_bet' => 'required',
+            'maximum_bet' => 'required',
         ]);
 
 
@@ -102,9 +102,9 @@ class FinishedGoodController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'material_code' => 'required|integer',
-            'material_name' => 'required',
-            'hsn_sac_code' => 'required',
+            'game_spin_time' => 'required|integer',
+            'min_bet' => 'required',
+            'maximum_bet' => 'required',
             'game_name' => 'nullable|string',
             'game_type' => 'nullable|string',
             'game_category' => 'nullable|string',
@@ -113,15 +113,15 @@ class FinishedGoodController extends Controller
         $game = Game::findOrFail($id);
 
         $game->update([
-            'material_code'   => $validated['material_code'],
-            'game_spin_time'  => $validated['material_code'],
-            'material_name'   => $validated['material_name'],
-            'maximum_bet'     => $validated['material_name'],
-            'hsn_sac_code'    => $validated['hsn_sac_code'],
-            'min_bet'         => $validated['hsn_sac_code'],
+           
+            'game_spin_time'  => $validated['game_spin_time'],
+            'maximum_bet'     => $validated['maximum_bet'],
+            'min_bet'         => $validated['min_bet'],
             'game_name'       => $request->game_name,
             'game_type'       => $request->game_type,
             'game_category'   => $request->game_category,
+            'winning_percentage'   => $request->winning_percentage,
+            'override_chance'   => $request->override_chance,
         ]);
 
         $from_id = auth()->id();

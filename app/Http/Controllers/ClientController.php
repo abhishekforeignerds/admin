@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\GameResults;
 use App\Models\Notification;
 use App\Models\Users;
+use App\Models\User;
 use App\Models\Plant;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -30,65 +31,63 @@ class ClientController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'role' => 'required|string',
-           'mobile_number' =>  [
-                'nullable',
-                'string',
-                'size:10', // Ensures exactly 10 digits
-                'regex:/^[0-9]{10}$/', // Ensures only numeric values
-                Rule::unique('users', 'mobile_number'),
-            ],
-            'status' => 'required',
-            'company_name' => 'nullable|string',
-            'gstin_number' => 'nullable|string',
-            'pan_card' => 'nullable|string',
-            'state_code' => 'nullable',
-             'plant_id' => 'nullable|string',
-            'company_address' => 'nullable|string',
-        ]);
+{
+    $validated = $request->validate([
+        'first_name'          => 'required|string|max:255',
+        'last_name'           => 'required|string|max:255',
+        'country'             => 'required|string|max:100',
+        'phone'               => [
+            'required',
+            'string',
+            'max:15',
+            'regex:/^[0-9]{7,15}$/',
+            Rule::unique('user', 'phone'),
+        ],
+        'email'               => 'required|string|email|max:255|unique:user',
+        'username'            => [
+            'required',
+            'string',
+            'max:100',
+            Rule::unique('user', 'username'),
+        ],
+        'password'            => 'required|string|min:8',
+        'points'              => 'required|integer|min:0',
+        'winning_percentage'  => 'required|numeric|min:0|max:100',
+        'override_chance'     => 'required|numeric|min:0|max:100',
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'mobile_number' => $request->mobile_number,
-            'status' => $request->status,
-            'company_name' => $request->company_name,
-            'gstin_number' => $request->gstin_number,
-            'pan_card' => $request->pan_card,
-            'state_code' => $request->state_code,
-          'plant_assigned' => $request->plant_id,
-            'company_address' => $request->company_address,
-        ]);
+    $user = Users::create([
+        'first_name'          => $request->first_name,
+        'last_name'           => $request->last_name,
+        'country'             => $request->country,
+        'phone'               => $request->phone,
+        'email'               => $request->email,
+        'username'            => $request->username,
+        'password'            => bcrypt($request->password),
+        'points'              => $request->points,
+        'winning_percentage'  => $request->winning_percentage,
+        'override_chance'     => $request->override_chance,
+    ]);
 
-        $user->assignRole($request->role);
+    // Optionally, if you no longer assign a role, remove this line.
+    // $user->assignRole($request->role);
 
-        $from_id = auth()->id();
-        $superAdmin = User::whereHas('roles', function ($query) {
-            $query->where('name', 'Super Admin');
-        })->first();
-    
-        Notification::create([
-            'from_id'           => $from_id,
-            'to_id'             => $superAdmin->id ?? 1,
-            'type'              => 'created',
-            'purpose'              => 'completed',
-            'status'            => 'unread',
-            'notification_text' => 'New Client Added successfully.',
-            'notification_url'  => 'finished-goods',
-        ]);
+    Notification::create([
+        'from_id'           => auth()->id(),
+        'to_id'             => User::whereHas('roles', fn($q) => $q->where('name', 'Super Admin'))->value('id') ?? 1,
+        'type'              => 'created',
+        'purpose'           => 'client_created',
+        'status'            => 'unread',
+        'notification_text' => 'New Client Added successfully.',
+        'notification_url'  => 'clients',
+    ]);
 
-        return redirect()->route('clients.index')->with('success', 'Client created successfully.');
-    }
+    return redirect()->route('clients.index')->with('success', 'Client created successfully.');
+}
 
     public function edit($id)
     {
-        $user = User::with('roles')->findOrFail($id);
+        $user = Users::findOrFail($id);
         $roles = Role::all();
         $plants =  Plant::where('status', 'active')->get();
         // echo '<pre>';
@@ -99,69 +98,75 @@ class ClientController extends Controller
       public function view($id)
     {
    
-        $gameResults = GameResults::with(['client', 'games'])->where('user_id', $id)->get()->groupBy('game_id');
+        $gameResults = GameResults::with(['client', 'games'])
+        ->where('user_id', $id)
+        ->where('bet', '>', 0)
+        ->get()
+        ->groupBy('game_id');
+    
         // echo '<pre>';
         // print_r($user);die;
     
         return Inertia::render('Players/Viewuser', ['gameResults' => $gameResults]);
     }
 
-   public function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'country' => 'required|string|max:100',
+            'phone' => [
+                'required',
+                'string',
+                'max:15',
+                'regex:/^[0-9]{7,15}$/',
+                Rule::unique('user', 'phone')->ignore($id),
+            ],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('user', 'email')->ignore($id),
+            ],
+            'username' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('user', 'username')->ignore($id),
+            ],
             'password' => 'nullable|string|min:8',
-            'role' => 'required|string',
-            'mobile_number' => [
-            'nullable',
-            'string',
-            'size:10',
-            'regex:/^[0-9]{10}$/',
-            Rule::unique('users', 'mobile_number')->ignore($id), // Ignore the current user's mobile number
-        ],
-            'status' => 'required',
-            'company_name' => 'required|string',
-            'gstin_number' => 'required|string',
-            'pan_card' => 'required|string',
-            'plant_assigned' => 'required|string',
-            'state_code' => 'required|string',
-            'company_address' => 'required|string',
+            'points' => 'required|integer|min:0',
+            'winning_percentage' => 'required|numeric|min:0|max:100',
+            'override_chance' => 'required|numeric|min:0|max:100',
         ]);
-
-        $user = User::findOrFail($id);
-
+    
+        $user = Users::findOrFail($id);
+    
         $user->update([
-            'name' => $request->name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'country' => $request->country,
+            'phone' => $request->phone,
             'email' => $request->email,
+            'username' => $request->username,
             'password' => $request->password ? bcrypt($request->password) : $user->password,
-            'mobile_number' => $request->mobile_number,
-            'status' => $request->status,
-            'company_name' => $request->company_name,
-            'gstin_number' => $request->gstin_number,
-            'pan_card' => $request->pan_card,
-            'state_code' => $request->state_code,
-            'plant_assigned' => $request->plant_assigned,
-            'company_address' => $request->company_address,
+            'points' => $request->points,
+            'winning_percentage' => $request->winning_percentage,
+            'override_chance' => $request->override_chance,
         ]);
-
-        $user->syncRoles($request->role);
-
-        $from_id = auth()->id();
-        $superAdmin = User::whereHas('roles', function ($query) {
-            $query->where('name', 'Super Admin');
-        })->first();
     
         Notification::create([
-            'from_id'           => $from_id,
-            'to_id'             => $superAdmin->id ?? 1,
-            'type'              => 'created',
-            'purpose'              => 'completed',
+            'from_id'           => auth()->id(),
+            'to_id'             => User::whereHas('roles', fn($q) => $q->where('name', 'Super Admin'))->value('id') ?? 1,
+            'type'              => 'update',
+            'purpose'           => 'client_edit',
             'status'            => 'unread',
             'notification_text' => 'Client updated successfully.',
-            'notification_url'  => 'finished-goods',
+            'notification_url'  => 'clients',
         ]);
-
+    
         return redirect()->route('clients.index')->with('success', 'Client updated successfully.');
     }
     public function suspend($id)

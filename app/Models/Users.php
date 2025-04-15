@@ -31,6 +31,8 @@ class Users extends Authenticatable
         'username',
         'password',
         'points',
+        'winning_percentage',
+        'override_chance',
     ];
 
 

@@ -5,12 +5,14 @@ import { FiChevronRight } from 'react-icons/fi';
 
 export default function Create({ message, rawMaterials }) {
     const { data, setData, post, processing, errors } = useForm({
-        material_code: '',
-        material_name: '',
-        hsn_sac_code: '',
+        game_spin_time: '',
+        min_bet: '',
+        maximum_bet: '',
         game_name: '',
         game_type: '',
         game_category: '',
+        winning_percentage: '',
+        override_chance: '',
 
     });
 
@@ -49,37 +51,37 @@ export default function Create({ message, rawMaterials }) {
                             <form onSubmit={handleSubmit} className="styled-form">
                                 <div className="theme-style-form grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                     <div className="mb-4">
-                                        <label className="block text-gray-700">Game Spin Time*</label>
+                                        <label className="block text-gray-700">Game Spin Duration*</label>
                                         <input
                                             type="text"
-                                            value={data.material_code}
-                                            onChange={(e) => setData('material_code', e.target.value)}
+                                            value={data.game_spin_time}
+                                            onChange={(e) => setData('game_spin_time', e.target.value)}
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Enter Material Code"
+                                            placeholder="Game Spin Duration"
                                         />
-                                        {errors.material_code && <div className="text-errorRed text-sm">{errors.material_code}</div>}
+                                        {errors.game_spin_time && <div className="text-errorRed text-sm">{errors.game_spin_time}</div>}
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-gray-700">Max Bet *</label>
                                         <input
                                             type="text"
-                                            value={data.material_name}
-                                            onChange={(e) => setData('material_name', e.target.value)}
+                                            value={data.min_bet}
+                                            onChange={(e) => setData('min_bet', e.target.value)}
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Enter Material Name"
+                                            placeholder="Minimum Bet"
                                         />
-                                        {errors.material_name && <div className="text-errorRed text-sm">{errors.material_name}</div>}
+                                        {errors.min_bet && <div className="text-errorRed text-sm">{errors.min_bet}</div>}
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-gray-700">Min Bet*</label>
                                         <input
                                             type="number" min={0}
-                                            value={data.hsn_sac_code}
-                                            onChange={(e) => setData('hsn_sac_code', e.target.value)}
+                                            value={data.maximum_bet}
+                                            onChange={(e) => setData('maximum_bet', e.target.value)}
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Enter Stock Quantity"
+                                            placeholder="Maximum Bet"
                                         />
-                                        {errors.hsn_sac_code && <div className="text-errorRed text-sm">{errors.hsn_sac_code}</div>}
+                                        {errors.maximum_bet && <div className="text-errorRed text-sm">{errors.maximum_bet}</div>}
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-gray-700">Game Name*</label>
@@ -88,7 +90,7 @@ export default function Create({ message, rawMaterials }) {
                                             value={data.game_name}
                                             onChange={(e) => setData('game_name', e.target.value)}
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Enter Stock Quantity"
+                                            placeholder="Game Name"
                                         />
                                         {errors.game_name && <div className="text-errorRed text-sm">{errors.game_name}</div>}
                                     </div>
@@ -99,7 +101,7 @@ export default function Create({ message, rawMaterials }) {
                                             value={data.game_type}
                                             onChange={(e) => setData('game_type', e.target.value)}
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Enter Stock Quantity"
+                                            placeholder="Game Type"
                                         />
                                         {errors.game_type && <div className="text-errorRed text-sm">{errors.game_type}</div>}
                                     </div>
@@ -110,9 +112,31 @@ export default function Create({ message, rawMaterials }) {
                                             value={data.game_category}
                                             onChange={(e) => setData('game_category', e.target.value)}
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Enter Stock Quantity"
+                                            placeholder="Game Category"
                                         />
                                         {errors.game_category && <div className="text-errorRed text-sm">{errors.game_category}</div>}
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700">Winning Percentage*</label>
+                                        <input
+                                            type="text"
+                                            value={data.winning_percentage}
+                                            onChange={(e) => setData('winning_percentage', e.target.value)}
+                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
+                                            placeholder="Winning Percentage"
+                                        />
+                                        {errors.winning_percentage && <div className="text-errorRed text-sm">{errors.winning_percentage}</div>}
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700">Override Chance*</label>
+                                        <input
+                                            type="text"
+                                            value={data.override_chance}
+                                            onChange={(e) => setData('override_chance', e.target.value)}
+                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
+                                            placeholder="Override Chance"
+                                        />
+                                        {errors.override_chance && <div className="text-errorRed text-sm">{errors.override_chance}</div>}
                                     </div>
 
 

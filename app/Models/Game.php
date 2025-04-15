@@ -16,5 +16,7 @@ class Game extends Model
         'game_name',
         'game_type',
         'game_category',
+        'winning_percentage',
+        'override_chance',
     ];
 }

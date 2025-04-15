@@ -4,20 +4,19 @@ import { Link } from '@inertiajs/react';
 import { FiChevronRight } from 'react-icons/fi';
 
 export default function Edit({ game, message }) {
-    // Populate initial form data from the passed game prop.
-    // Adjust the keys based on your mapping (e.g., game_spin_time, min_bet, maximum_bet)
     const { data, setData, put, processing, errors } = useForm({
-        material_code: game.game_spin_time || '', // Field mapped from store method
-        material_name: game.min_bet || '',
-        hsn_sac_code: game.maximum_bet || '',
+        game_spin_time: game.game_spin_time || '',
+        min_bet: game.min_bet || '',
+        maximum_bet: game.maximum_bet || '',
         game_name: game.game_name || '',
         game_type: game.game_type || '',
         game_category: game.game_category || '',
+        winning_percentage: game.winning_percentage || '',
+        override_chance: game.override_chance || '',
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Send a PUT request to update the game record.
         put(route('games.update', game.id));
     };
 
@@ -25,16 +24,15 @@ export default function Edit({ game, message }) {
         <AuthenticatedLayout
             header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Edit Game</h2>}
         >
-            <Head title="Edit Game" />
-
+            <Head title="Edit Finished Good" />
             <div className="main-content-container sm:ml-52">
                 <div className="mx-auto py-6 flex justify-between flex-col md:flex-row gap-2">
-                    <p className="flex flex-wrap">
+                    <p className='flex flex-wrap'>
                         <Link href={route('dashboard')}>Dashboard</Link>
                         <FiChevronRight size={24} color="black" />
                         <Link href={route('games.index')}>Games Management</Link>
                         <FiChevronRight size={24} color="black" />
-                        <span className="text-red">Edit Game</span>
+                        <span className='text-red'>Edit Game</span>
                     </p>
                     <Link
                         href={route('games.index')}
@@ -43,133 +41,37 @@ export default function Edit({ game, message }) {
                         Back
                     </Link>
                 </div>
-
                 <div className="mx-auto py-6">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <h1 className="mb-6 text-2xl font-bold text-gray-800">
-                                Edit Game Details
-                            </h1>
-                            {message && (
-                                <div className="mb-4 text-green-600">{message}</div>
-                            )}
+                            <h1 className="mb-6 text-2xl font-bold text-gray-800">Edit Game</h1>
+
+                            {message && <div className="mb-4 text-green-600">{message}</div>}
+
                             <form onSubmit={handleSubmit} className="styled-form">
                                 <div className="theme-style-form grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700">
-                                            Game Spin Time*
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={data.material_code}
-                                            onChange={(e) =>
-                                                setData('material_code', e.target.value)
-                                            }
-                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Enter Game Spin Time"
-                                        />
-                                        {errors.material_code && (
-                                            <div className="text-errorRed text-sm">
-                                                {errors.material_code}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700">
-                                            Max Bet *
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={data.material_name}
-                                            onChange={(e) =>
-                                                setData('material_name', e.target.value)
-                                            }
-                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Enter Max Bet"
-                                        />
-                                        {errors.material_name && (
-                                            <div className="text-errorRed text-sm">
-                                                {errors.material_name}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700">
-                                            Min Bet*
-                                        </label>
-                                        <input
-                                            type="number"
-                                            min={0}
-                                            value={data.hsn_sac_code}
-                                            onChange={(e) =>
-                                                setData('hsn_sac_code', e.target.value)
-                                            }
-                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Enter Min Bet"
-                                        />
-                                        {errors.hsn_sac_code && (
-                                            <div className="text-errorRed text-sm">
-                                                {errors.hsn_sac_code}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700">
-                                            Game Name*
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={data.game_name}
-                                            onChange={(e) =>
-                                                setData('game_name', e.target.value)
-                                            }
-                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Enter Game Name"
-                                        />
-                                        {errors.game_name && (
-                                            <div className="text-errorRed text-sm">
-                                                {errors.game_name}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700">
-                                            Game Type*
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={data.game_type}
-                                            onChange={(e) =>
-                                                setData('game_type', e.target.value)
-                                            }
-                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Enter Game Type"
-                                        />
-                                        {errors.game_type && (
-                                            <div className="text-errorRed text-sm">
-                                                {errors.game_type}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700">
-                                            Game Category*
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={data.game_category}
-                                            onChange={(e) =>
-                                                setData('game_category', e.target.value)
-                                            }
-                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Enter Game Category"
-                                        />
-                                        {errors.game_category && (
-                                            <div className="text-errorRed text-sm">
-                                                {errors.game_category}
-                                            </div>
-                                        )}
-                                    </div>
+                                    {[
+                                        { label: 'Game Spin Duration*', key: 'game_spin_time', placeholder: 'Game Spin Duration' },
+                                        { label: 'Min Bet*', key: 'min_bet', placeholder: 'Minimum Bet' },
+                                        { label: 'Max Bet*', key: 'maximum_bet', placeholder: 'Maximum Bet', type: 'number' },
+                                        { label: 'Game Name*', key: 'game_name', placeholder: 'Game Name' },
+                                        { label: 'Game Type*', key: 'game_type', placeholder: 'Game Type' },
+                                        { label: 'Game Category*', key: 'game_category', placeholder: 'Game Category' },
+                                        { label: 'Winning Percentage*', key: 'winning_percentage', placeholder: 'Winning Percentage' },
+                                        { label: 'Override Chance*', key: 'override_chance', placeholder: 'Override Chance' },
+                                    ].map(({ label, key, placeholder, type = 'text' }) => (
+                                        <div className="mb-4" key={key}>
+                                            <label className="block text-gray-700">{label}</label>
+                                            <input
+                                                type={type}
+                                                value={data[key]}
+                                                onChange={(e) => setData(key, e.target.value)}
+                                                className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
+                                                placeholder={placeholder}
+                                            />
+                                            {errors[key] && <div className="text-errorRed text-sm">{errors[key]}</div>}
+                                        </div>
+                                    ))}
                                 </div>
                                 <div>
                                     <button
