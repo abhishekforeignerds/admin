@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import { getStatusText, getStatusClass } from "../../../utils/statusUtils";
-import { filterOptions, filterByDate } from "@/Components/filterUtils";
+import { filterOptions, filterByDate } from "@/Components/FilterUtils";
 
 const OutgoingPOTable = ({ orders }) => {
     const plantIds = Object.keys(orders);

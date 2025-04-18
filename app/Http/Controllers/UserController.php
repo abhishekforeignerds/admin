@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Plant;
+use App\Models\Fund;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
@@ -149,6 +150,7 @@ class UserController extends Controller
         'password' => $request->password ? bcrypt($request->password) : $user->password,
         'mobile_number' => $request->mobile_number,
         'status' => $request->status,
+        'gstin_number' => $request->gstin_number,
     ]);
 
     $user->syncRoles($request->role);
@@ -208,6 +210,94 @@ $this->sendNotification(
                 'notification_url'  => $notification_url,
             ]);
         }
+    }
+
+    public function addfund($id)
+    {
+        $user = User::findOrFail($id);
+        $roles = Role::all();
+        $plants =  Plant::where('status', 'active')->get();
+        // echo '<pre>';
+        // print_r($user);die;
+    
+        return Inertia::render('Users/AddFund', ['client' => $user, 'roles' => $roles, 'plants' => $plants]);
+    }
+    public function storefund(Request $request, $id)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'amount' => 'required|numeric|min:0',
+            'reference_number' => 'required|string|unique:funds,reference_number',
+            'modeOfPayment' => 'required',
+        ]);
+        $superAdmin = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Super Admin');
+        })
+        ->first();
+        $subAdmin = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Sub Admin');
+        })
+        ->first();
+        $stockit = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Stockit');
+        })
+        ->first();
+        $fund = Fund::create([
+            'user_id' => $request->user_id,
+            'amount' => $request->amount,
+            'reference_number' => $request->reference_number,
+        ]);
+        $user = User::findOrFail($id);
+        if ($user->roles->contains('name', 'Sub Admin')) {
+            if ($superAdmin->pan_card - $request->amount < 0) {
+                return redirect()->route('users.index')
+                ->with('success', 'Low Balance');
+            } else {
+                $user->update([
+                    'pan_card' => $user->pan_card + $request->amount,
+                ]);
+                $superAdmin->update([
+                    'pan_card' => $superAdmin->pan_card - $request->amount,
+                ]);
+                return redirect()->route('users.index')
+                ->with('success', 'Fund Added Successfully');
+            }
+        }
+        if ($user->roles->contains('name', 'Retailer')) {
+            if ($stockit->pan_card - $request->amount < 0) {
+                return redirect()->route('users.index')
+                ->with('success', 'Low Balance');
+            } else {
+                $user->update([
+                    'pan_card' => $user->pan_card + $request->amount,
+                ]);
+                $stockit->update([
+                    'pan_card' => $stockit->pan_card - $request->amount,
+                ]);
+                return redirect()->route('users.index')
+                ->with('success', 'Fund Added Successfully');
+            }
+        }
+        if ($user->roles->contains('name', 'Stockit')) {
+            
+            if ($subAdmin->pan_card - $request->amount < 0) {
+                return redirect()->route('users.index')
+                ->with('success', 'Low Balance');
+            } else {
+                $user->update([
+                    'pan_card' => $user->pan_card + $request->amount,
+                ]);
+                $subAdmin->update([
+                    'pan_card' => $subAdmin->pan_card - $request->amount,
+                ]);
+                return redirect()->route('users.index')
+                ->with('success', 'Fund Added Successfully');
+            }
+            
+        }
+       
+       // Redirect to a valid Inertia route with a flash message.
+       
     }
 
 }

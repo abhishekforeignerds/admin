@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import React, { useState } from "react";
 import { Link, usePage } from '@inertiajs/react';
-import { filterByDate, filterOptions } from '@/Components/filterUtils';
+import { filterByDate, filterOptions } from '@/Components/FilterUtils';
 
 
 

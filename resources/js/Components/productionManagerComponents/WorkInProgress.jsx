@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { getStatusClass } from "../../../utils/statusUtils";
-import { filterOptions, filterByDate } from "@/Components/filterUtils";
+import { filterOptions, filterByDate } from "@/Components/FilterUtils";
 
 const WorkInProgressTable = ({ productionsOrders = [] }) => {
     const [selectedFilter, setSelectedFilter] = useState("all");

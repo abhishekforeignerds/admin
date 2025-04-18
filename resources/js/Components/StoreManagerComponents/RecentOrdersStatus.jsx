@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import img1Over from "../../../assets/mat-card-subtitle → Customers (2).png";
 import img2Over from "../../../assets/service-icon.png";
 import PurchaseOrderModal from "./PurchaseOrderModal";
-import { filterByDate, filterOptions } from "@/Components/filterUtils";
+import { filterByDate, filterOptions } from "@/Components/FilterUtils";
 
 const RecentOrdersStatus = ({ purchaseorderstable = [] }) => {
     // Array for dynamic styling

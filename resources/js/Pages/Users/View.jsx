@@ -1,57 +1,57 @@
 import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import { Link, usePage } from '@inertiajs/react';
-import { FiChevronRight } from 'react-icons/fi';
-import { FiMoreVertical } from "react-icons/fi";
-import OptionsDropdown from '../../Components/styledComponents/optionsToggle';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { FiChevronRight, FiMoreVertical } from 'react-icons/fi';
 import ItemInfoRedCard from '@/Components/ItemInfoRedCard';
-import { totalPlantsIcon, activePlantsIcon, maintenanceIcon, totalCapicityIcon, searchFormIcon } from '../../../utils/svgIconContent'
 import ItemInfoGreeCard from '@/Components/ItemInfoGreeCard';
 import { ItemInfoBlueCard } from '@/Components/ItemInfoBlueCard';
 import ItemInfoSkyBlueCard from '@/Components/ItemInfoSkyBlueCard';
+import Pagination from '@/Components/Pagination';
+import { totalPlantsIcon, activePlantsIcon, maintenanceIcon, totalCapicityIcon, searchFormIcon } from '../../../utils/svgIconContent';
 import { useAutoHideFlash } from './../../../utils/useAutoHideFlash';
 import { getStatusText, getStatusClass } from './../../../utils/statusUtils';
 import { filterByDate, filterOptions } from '@/Components/FilterUtils';
-import Pagination from '@/Components/Pagination';
 
 export default function View({ users, statusCounts }) {
     const [search, setSearch] = useState('');
-    const { flash = {} } = usePage().props;
-    const [selectedMonth, setSelectedMonth] = useState('');
+    const [selectedFilter, setSelectedFilter] = useState('all');
     const [openDropdown, setOpenDropdown] = useState(null);
+    const { flash = {}, auth } = usePage().props;
     const showFlash = useAutoHideFlash(flash.success);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const userPermissions = auth.user.rolespermissions.flatMap(r => r.permissions);
 
-    // Extract unique months from the `created_at` field
-    const [selectedFilter, setSelectedFilter] = useState('all'); // Default: All Time
-
-    // Filter users based on search term and selected date range
+    // 1️⃣ Filter users
     const filteredUsers = users.filter(user => {
         const matchesSearch =
             user.name.toLowerCase().includes(search.toLowerCase()) ||
             user.email.toLowerCase().includes(search.toLowerCase());
-        const matchesDate = selectedFilter === 'all' ? true : filterByDate(user.created_at, selectedFilter);
-        return matchesSearch && matchesDate && user.status !== "deleted";
+        const matchesDate = selectedFilter === 'all'
+            ? true
+            : filterByDate(user.created_at, selectedFilter);
+        return matchesSearch && matchesDate && user.status !== 'deleted';
     });
 
-    const toggleDropdown = (email) => {
-        setOpenDropdown(openDropdown === email ? null : email);
-    };
-    const closeDropdown = () => {
-        setOpenDropdown(null);
-    };
-    const handleRowsPerPageChange = (rows) => {
-        setRowsPerPage(rows);
-        setCurrentPage(1); // Reset to page 1 when rows change
+    // 2️⃣ Define display order and permission keys
+    const rolesOrder = ['Super Admin', 'Sub Admin', 'Stockit', 'Retailer'];
+    const rolePermissionsMap = {
+        'Super Admin': 'superadmin-table users',
+        'Sub Admin': 'subadmin-table users',
+        'Stockit': 'stockit-table users',
+        'Retailer': 'retailer-table users',
     };
 
-    // Pagination calculations
-    const indexOfLastRow = currentPage * rowsPerPage;
-    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-    const currentUsers = filteredUsers.slice(indexOfFirstRow, indexOfLastRow);
-    const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
+    // 3️⃣ Group users by role
+    const groupedUsers = rolesOrder.reduce((acc, roleName) => {
+        acc[roleName] = filteredUsers.filter(u =>
+            u.roles.some(r => r.name === roleName)
+        );
+        return acc;
+    }, {});
+
+    const toggleDropdown = email =>
+        setOpenDropdown(openDropdown === email ? null : email);
+    const closeDropdown = () => setOpenDropdown(null);
+
     return (
         <AuthenticatedLayout
             header={
@@ -61,151 +61,167 @@ export default function View({ users, statusCounts }) {
             }
         >
             <Head title="Users" />
+
             <div className="main-content-container sm:ml-52">
                 <div className="mx-auto py-6">
-                    <div className=''>
-                        <p className='flex'><Link href={route('dashboard')}>Dashboard</Link>  <FiChevronRight size={24} color="black" /><Link href={route('users.index')}> Users Management</Link>  <FiChevronRight size={24} color="black" /> <span className='text-red'>User List</span></p>
+                    {/* Breadcrumb + Status Cards + Create Button */}
+                    <p className="flex">
+                        <Link href={route('dashboard')}>Dashboard</Link>
+                        <FiChevronRight size={24} />
+                        <Link href={route('users.index')}> Users Management</Link>
+                        <FiChevronRight size={24} />
+                        <span className="text-red">User List</span>
+                    </p>
 
-                        {/* Status Cards */}
-                        <div className="flex my-6 flex-col gap-6 md:flex-row">
-                            {/* total users */}
-                            <ItemInfoRedCard svgIcon={totalPlantsIcon} cardHeading='Total Users' description={statusCounts.allUsers} />
-                            {/* Active Users */}
-                            <ItemInfoGreeCard svgIcon={activePlantsIcon} cardHeading='Active Users' description={statusCounts.active} />
-                            {/* Pending Approval */}
-                            <ItemInfoBlueCard svgIcon={maintenanceIcon} cardHeading="Pending Approval" description={statusCounts.pending} />
-                            {/* Inactive Users */}
-                            <ItemInfoSkyBlueCard svgIcon={totalCapicityIcon} cardHeading='Inactive Users' description={statusCounts.inactive} />
-                        </div>
-                        <Link className='text-right bg-red px-8 py-2 rounded-md text-white block max-w-max ml-auto mb-4'
-                            href={route('users.create')}>Create Users</Link>
-
+                    <div className="flex my-6 flex-col gap-6 md:flex-row">
+                        <ItemInfoRedCard
+                            svgIcon={totalPlantsIcon}
+                            cardHeading="Total Users"
+                            description={statusCounts.allUsers}
+                        />
+                        <ItemInfoGreeCard
+                            svgIcon={activePlantsIcon}
+                            cardHeading="Active Users"
+                            description={statusCounts.active}
+                        />
+                        <ItemInfoBlueCard
+                            svgIcon={maintenanceIcon}
+                            cardHeading="Pending Approval"
+                            description={statusCounts.pending}
+                        />
+                        <ItemInfoSkyBlueCard
+                            svgIcon={totalCapicityIcon}
+                            cardHeading="Inactive Users"
+                            description={statusCounts.inactive}
+                        />
                     </div>
+
+                    <Link
+                        className="text-right bg-red px-8 py-2 rounded-md text-white block max-w-max ml-auto mb-4"
+                        href={route('users.create')}
+                    >
+                        Create Users
+                    </Link>
+
+                    {/* Flash Message */}
                     {showFlash && flash.success && (
                         <div className="mb-4 p-4 bg-lightShadeGreen text-darkShadeGreen font-bold border border-green-200 rounded">
                             {flash.success}
                         </div>
                     )}
-                    <div className="bg-white shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            <div className='top-search-bar-box flex py-4 gap-2'>
-                                <h2 className='font-bold text-2xl'>Users List</h2>
-                                <div className='flex items-center justify-end flex-1 gap-2'>
-                                    <form className="flex items-center max-w-sm">
-                                        <label htmlFor="simple-search" className="sr-only">Search by Name or Email</label>
-                                        <div className="relative w-full">
-                                            <input
-                                                type="text"
-                                                id="simple-search"
-                                                className="bg-white border border-gray-300 placeholder:text-black text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pe-10 p-2.5"
-                                                placeholder="Search by Name or Email"
-                                                value={search}
-                                                onChange={(e) => setSearch(e.target.value)} // Set search state
-                                            />
-                                            <div className="absolute inset-y-0 end-2 flex items-center ps-3 pointer-events-none">
-                                                {searchFormIcon}
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <div className="">
-                                        <select
-                                            className="border border-gray-300 rounded-md px-8 py-2.5 text-sm"
-                                            value={selectedFilter}
-                                            onChange={(e) => setSelectedFilter(e.target.value)}
-                                        >
-                                            {filterOptions.map(option => (
-                                                <option key={option.value} value={option.value}>
-                                                    {option.label}
-                                                </option>
-                                            ))}
-                                        </select></div>
-                                </div>
-                            </div>
-                            <div className='table-container md:overflow-x-visible overflow-x-auto'>
-                                <table className="min-w-full bg-white">
-                                    <thead>
-                                        <tr>
-                                            <th className="px-2 py-3 border-b text-red text-left text-sm">Full Name</th>
-                                            <th className="px-2 py-3 border-b text-red text-left text-sm">Email Address</th>
-                                            <th className="px-2 py-3 border-b text-red text-left text-sm">Mobile</th>
-                                            <th className="px-2 py-3 border-b text-red text-left text-sm">Role</th>
-                                            <th className="px-2 py-3 border-b text-red text-left text-sm">Status</th>
-                                            {/* <th className="px-2 py-3 border-b text-red text-left text-sm">Assigned Plant</th> */}
-                                            <th className="px-2 py-3 border-b text-red text-left text-sm">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {currentUsers.map(user => (
-                                            <tr key={user.id}>
-                                                <td className="px-2 py-3 border-b text-sm font-semibold">{user.name}</td>
-                                                <td className="px-2 py-3 border-b text-sm">{user.email}</td>
-                                                <td className="px-2 py-3 border-b text-sm">{user.mobile_number || 'N/A'}</td>
-                                                <td className="px-2 py-3 border-b text-sm">{user.roles.map(role => role.name).join(', ')}</td>
-                                                <td className="px-2 py-3 border-b text-sm">
-                                                    <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusClass(user.status)}`}>
-                                                        {getStatusText(user.status)}
-                                                    </span>
-                                                </td>
-                                                {/* <td className="px-2 py-3 border-b text-sm">
-                                                    {user.plant && user.plant.plant_name ? user.plant.plant_name : 'No Plant Assigned'}
-                                                </td> */}
-                                                <td className="px-2 py-3 border-b text-sm relative">
-                                                    <button
-                                                        type="button"
-                                                        className="flex justify-center items-center size-9 text-sm font-semibold rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
-                                                        onClick={() => toggleDropdown(user.email)}
-                                                        aria-haspopup="menu"
-                                                        aria-expanded={openDropdown === user.email ? "true" : "false"}
-                                                        aria-label="Dropdown"
-                                                    >
-                                                        <FiMoreVertical className="size-4 text-gray-600" />
-                                                    </button>
-                                                    {openDropdown === user.email && (
-                                                        <div
-                                                            className="absolute right-0 mt-2 min-w-40 bg-slate-200 shadow-md rounded-lg transition-opacity duration-200 z-10"
-                                                            role="menu"
-                                                            aria-orientation="vertical"
-                                                            onMouseLeave={closeDropdown}
-                                                        >
-                                                            <div className="space-y-0.5 flex flex-col p-2 gap-1">
-                                                                <Link
-                                                                    href={route('users.edit', user.id)}
-                                                                    className="text-blue-500 hover:underline"
-                                                                >
-                                                                    Edit
-                                                                </Link>
-                                                                <Link
-                                                                    href={route('users.view', user.id)}
-                                                                    className="text-blue-500 hover:underline"
-                                                                >
-                                                                    View
-                                                                </Link>
-                                                                {!user.roles.map(role => role.name).includes('Super Admin') && (
-                                                                    <Link
-                                                                        href={route('users.suspend', user.id)}
-                                                                        className="text-blue-500 hover:underline"
-                                                                    >
-                                                                        Suspend
-                                                                    </Link>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                {/* Pagination Controls */}
-                                <Pagination
-                                    currentPage={currentPage}
-                                    totalPages={totalPages}
-                                    rowsPerPage={rowsPerPage}
-                                    setRowsPerPage={handleRowsPerPageChange}
-                                    setCurrentPage={setCurrentPage}
-                                />
+
+                    {/* Search + Date Filter */}
+                    <div className="bg-white shadow-sm sm:rounded-lg p-6 text-gray-900">
+                        <div className="top-search-bar-box flex py-4 gap-2">
+                            <h2 className="font-bold text-2xl">Users List</h2>
+                            <div className="flex items-center gap-2 flex-1 justify-end">
+                                <form className="flex items-center max-w-sm">
+                                    <input
+                                        type="text"
+                                        placeholder="Search by Name or Email"
+                                        className="bg-white border border-gray-300 text-sm rounded-lg block w-full pe-10 p-2.5"
+                                        value={search}
+                                        onChange={e => setSearch(e.target.value)}
+                                    />
+                                    <div className="absolute inset-y-0 end-2 ps-3 pointer-events-none">
+                                        {searchFormIcon}
+                                    </div>
+                                </form>
+                                <select
+                                    className="border border-gray-300 rounded-md px-4 py-2.5 text-sm"
+                                    value={selectedFilter}
+                                    onChange={e => setSelectedFilter(e.target.value)}
+                                >
+                                    {filterOptions.map(opt => (
+                                        <option key={opt.value} value={opt.value}>
+                                            {opt.label}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
+
+                        {/* 4️⃣ Render one table per role, gated by permission */}
+                        {rolesOrder.map(roleName => {
+                            const permissionKey = rolePermissionsMap[roleName];
+                            if (!userPermissions.includes(permissionKey)) {
+                                return null;
+                            }
+                            const usersForRole = groupedUsers[roleName];
+                            return (
+                                <div key={roleName} className="mt-8">
+                                    <h3 className="text-xl font-semibold mb-2">{roleName}</h3>
+                                    {usersForRole.length > 0 ? (
+                                        <div className="overflow-x-auto">
+                                            <table className="min-w-full bg-white">
+                                                <thead>
+                                                    <tr>
+                                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Full Name</th>
+                                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Email Address</th>
+                                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Commission %</th>
+                                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Mobile</th>
+                                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Status</th>
+                                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Balance</th>
+                                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {usersForRole.map(user => (
+                                                        <tr key={user.id}>
+                                                            <td className="px-2 py-3 border-b text-sm font-semibold">{user.name}</td>
+                                                            <td className="px-2 py-3 border-b text-sm">{user.email}</td>
+                                                            <td className="px-2 py-3 border-b text-sm">{user.gstin_number || 0}%</td>
+                                                            <td className="px-2 py-3 border-b text-sm">{user.mobile_number || 'N/A'}</td>
+                                                            <td className="px-2 py-3 border-b text-sm">
+                                                                <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusClass(user.status)}`}>
+                                                                    {getStatusText(user.status)}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-2 py-3 border-b text-sm">
+                                                                {(Number(user.pan_card) || 0).toLocaleString('en-IN')}
+                                                            </td>
+                                                            <td className="px-2 py-3 border-b text-sm relative">
+                                                                {userPermissions.includes('view users') && (
+                                                                    <Link
+                                                                        className="bg-red px-3 py-1 rounded-md text-white text-xs"
+                                                                        href={route('users.addfund', user.id)}
+                                                                    >
+                                                                        Add Fund
+                                                                    </Link>
+                                                                )}
+                                                                <button onClick={() => toggleDropdown(user.email)} className="ml-2">
+                                                                    <FiMoreVertical />
+                                                                </button>
+                                                                {openDropdown === user.email && (
+                                                                    <div
+                                                                        className="absolute right-0 mt-2 bg-slate-200 shadow-md rounded-lg p-2"
+                                                                        onMouseLeave={closeDropdown}
+                                                                    >
+                                                                        <Link href={route('users.edit', user.id)} className="block hover:underline">
+                                                                            Edit
+                                                                        </Link>
+                                                                        <Link href={route('users.view', user.id)} className="block hover:underline">
+                                                                            View
+                                                                        </Link>
+                                                                        {!user.roles.map(r => r.name).includes('Super Admin') && (
+                                                                            <Link href={route('users.suspend', user.id)} className="block hover:underline">
+                                                                                Suspend
+                                                                            </Link>
+                                                                        )}
+                                                                    </div>
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    ) : (
+                                        <p className="text-sm italic text-gray-500">No {roleName} users found.</p>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

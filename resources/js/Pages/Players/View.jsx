@@ -95,7 +95,7 @@ export default function View({ users }) {
                         <p className="flex flex-wrap">
                             <Link href={route('dashboard')}>Dashboard</Link>
                             <FiChevronRight size={24} color="black" />
-                            <Link href={route('clients.index')}>Players Management</Link>
+                            <Link href={route('players.index')}>Players Management</Link>
                             <FiChevronRight size={24} color="black" />
                             <span className="text-red">Client List</span>
                         </p>
@@ -103,7 +103,7 @@ export default function View({ users }) {
                         {userPermissions.includes("create clients") && (
                             <Link
                                 className="text-right bg-red px-8 py-2 rounded-md text-white block max-w-max ml-auto mb-4"
-                                href={route('clients.create')}
+                                href={route('players.create')}
                             >
                                 Create Client
                             </Link>
@@ -182,6 +182,12 @@ export default function View({ users }) {
                                                 {user.created_at && isNewUser(user.created_at) ? 'Yes' : 'No'}
                                             </td>
                                             <td className="px-2 py-3 border-b text-sm relative">
+                                                <Link
+                                                    className="text-right bg-red px-8 py-2 rounded-md text-white block max-w-max ml-auto mb-4"
+                                                    href={route('players.addfund', user.id)}
+                                                >
+                                                    Add Fund
+                                                </Link>
                                                 <button
                                                     type="button"
                                                     className="flex justify-center items-center size-9 text-sm font-semibold rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
@@ -192,6 +198,7 @@ export default function View({ users }) {
                                                 >
                                                     <FiMoreVertical className="size-4 text-gray-600" />
                                                 </button>
+
                                                 {openDropdown === user.email && (
                                                     <div
                                                         className="absolute right-0 mt-2 min-w-40 bg-slate-200 shadow-md rounded-lg transition-opacity duration-200 z-10"
@@ -201,20 +208,20 @@ export default function View({ users }) {
                                                     >
                                                         <div className="space-y-0.5 flex flex-col p-2 gap-1">
                                                             <Link
-                                                                href={route('clients.edit', user.id)}
+                                                                href={route('players.edit', user.id)}
                                                                 className="text-blue-500 hover:underline"
                                                             >
                                                                 Edit
                                                             </Link>
                                                             <Link
-                                                                href={route('clients.view', user.id)}
+                                                                href={route('players.view', user.id)}
                                                                 className="text-blue-500 hover:underline"
                                                             >
                                                                 View Games
                                                             </Link>
 
                                                             <Link
-                                                                href={route('clients.suspend', user.id)}
+                                                                href={route('players.suspend', user.id)}
                                                                 className="text-blue-500 hover:underline"
                                                             >
                                                                 Suspend

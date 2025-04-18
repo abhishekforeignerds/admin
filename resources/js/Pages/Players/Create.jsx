@@ -13,13 +13,13 @@ export default function Create() {
         username: '',
         password: '',
         points: '',
-        winning_percentage: '',
-        override_chance: '',
+        winning_percentage: 70,
+        override_chance: 0.3,
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('clients.store'));
+        post(route('players.store'));
     };
 
     return (
@@ -37,12 +37,12 @@ export default function Create() {
                     <p className="flex flex-wrap">
                         <Link href={route('dashboard')}>Dashboard</Link>
                         <FiChevronRight size={24} color="black" />
-                        <Link href={route('clients.index')}> Clients Management</Link>
+                        <Link href={route('players.index')}> Clients Management</Link>
                         <FiChevronRight size={24} color="black" />
                         <span className="text-red">Create Client</span>
                     </p>
                     <Link
-                        href={route('clients.index')}
+                        href={route('players.index')}
                         className="border border-red py-1 px-14 text-red rounded max-w-max"
                     >
                         Back
@@ -154,31 +154,35 @@ export default function Create() {
                                         {errors.points && <div className="text-red-600">{errors.points}</div>}
                                     </div>
                                     {/* Winning Percentage */}
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700">Winning Percentage*</label>
-                                        <input
-                                            type="number"
-                                            step="0.01"
-                                            value={data.winning_percentage}
-                                            onChange={(e) => setData('winning_percentage', e.target.value)}
-                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Enter Winning Percentage"
-                                        />
-                                        {errors.winning_percentage && <div className="text-red-600">{errors.winning_percentage}</div>}
-                                    </div>
+                                    {userPermissions.includes("winningpercentage players") && (
+                                        <div className="mb-4">
+                                            <label className="block text-gray-700">Winning Percentage*</label>
+                                            <input
+                                                type="number"
+                                                step="0.01"
+                                                value={data.winning_percentage}
+                                                onChange={(e) => setData('winning_percentage', e.target.value)}
+                                                className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
+                                                placeholder="Enter Winning Percentage"
+                                            />
+                                            {errors.winning_percentage && <div className="text-red-600">{errors.winning_percentage}</div>}
+                                        </div>
+                                    )}
                                     {/* Override Chance */}
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700">Override Chance*</label>
-                                        <input
-                                            type="number"
-                                            step="0.01"
-                                            value={data.override_chance}
-                                            onChange={(e) => setData('override_chance', e.target.value)}
-                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            placeholder="Enter Override Chance"
-                                        />
-                                        {errors.override_chance && <div className="text-red-600">{errors.override_chance}</div>}
-                                    </div>
+                                    {userPermissions.includes("overidechance players") && (
+                                        <div className="mb-4">
+                                            <label className="block text-gray-700">Override Chance*</label>
+                                            <input
+                                                type="number"
+                                                step="0.01"
+                                                value={data.override_chance}
+                                                onChange={(e) => setData('override_chance', e.target.value)}
+                                                className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
+                                                placeholder="Enter Override Chance"
+                                            />
+                                            {errors.override_chance && <div className="text-red-600">{errors.override_chance}</div>}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="mt-6">

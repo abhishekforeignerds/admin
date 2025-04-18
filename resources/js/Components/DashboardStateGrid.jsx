@@ -35,7 +35,7 @@ const DashboardStateGrid = ({ statusCounts = {} }) => {
       {
         img: img4,
         title: "All Players",
-        description: "Plants Operational",
+        description: "",
         numberInfo: statusCounts.normalUsers || 0,
         bgColor: "#FFEFEF",
         statusInfo: "",

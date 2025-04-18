@@ -43,6 +43,8 @@ Route::middleware(['auth', 'dynamic.permission'])->group(function () {
 
     Route::get('users/{id}/view', [UserController::class, 'view'])->name('users.view');
     Route::get('users/{id}/suspend', [UserController::class, 'suspend'])->name('users.suspend');
+    Route::get('users/{id}/addfund', [UserController::class, 'addfund'])->name('users.addfund');
+    Route::put('users/{id}/storefund', [UserController::class, 'storefund'])->name('users.storefund');
 });
 
 use App\Http\Controllers\InventoryController;
@@ -138,9 +140,11 @@ Route::post('/plants/games/import', [PlantController::class, 'importfg'])->name(
 use App\Http\Controllers\ClientController;
     // Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'dynamic.permission'])->group(function () {
-    Route::resource('clients', ClientController::class);
-    Route::get('clients/{id}/view', [ClientController::class, 'view'])->name('clients.view');
-    Route::get('clients/{id}/suspend', [ClientController::class, 'suspend'])->name('clients.suspend');
+    Route::resource('players', ClientController::class);
+    Route::get('players/{id}/view', [ClientController::class, 'view'])->name('players.view');
+    Route::get('players/{id}/addfund', [ClientController::class, 'addfund'])->name('players.addfund');
+    Route::put('players/{id}/storefund', [ClientController::class, 'storefund'])->name('players.storefund');
+    Route::get('players/{id}/suspend', [ClientController::class, 'suspend'])->name('players.suspend');
 });
 use App\Http\Controllers\VendorController;
     // Route::middleware(['auth'])->group(function () {

@@ -9,6 +9,7 @@ export default function Edit({ user, roles, plants }) {
         email: user.email,
         status: user.status,
         mobile_number: user.mobile_number,
+        gstin_number: user.gstin_number,
         password: '',
         role: user.roles && user.roles.length > 0 ? user.roles[0].name : '',
         plant_assigned: user.plant ? user.plant.id : '',
@@ -136,6 +137,16 @@ export default function Edit({ user, roles, plants }) {
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
                                             required />
                                         {errors.mobile_number && <div className="text-errorRed text-sm">{errors.mobile_number}</div>}
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700">Commission Percentage</label>
+                                        <input
+                                            type="text"
+                                            value={data.gstin_number}
+                                            onChange={(e) => setData('gstin_number', e.target.value)}
+                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
+                                            required />
+                                        {errors.gstin_number && <div className="text-errorRed text-sm">{errors.gstin_number}</div>}
                                     </div>
 
 

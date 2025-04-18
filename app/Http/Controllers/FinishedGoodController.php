@@ -120,8 +120,6 @@ class FinishedGoodController extends Controller
             'game_name'       => $request->game_name,
             'game_type'       => $request->game_type,
             'game_category'   => $request->game_category,
-            'winning_percentage'   => $request->winning_percentage,
-            'override_chance'   => $request->override_chance,
         ]);
 
         $from_id = auth()->id();

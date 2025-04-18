@@ -38,10 +38,10 @@ export default function Login({ status }) {
     const sendOtp = async () => {
         setErrorMessage(null);
         sessionStorage.removeItem("errorMessage"); // Clear previous error
-    
+
         try {
             const formattedMobile = `+91${data.mobile}`; // Ensure +91 is included
-    
+
             const response = await axios.post(route('send.otp'), { mobile: formattedMobile });
             setOtpSent(true);
             setResendTimer(30); // Start 30-second timer
@@ -51,7 +51,7 @@ export default function Login({ status }) {
             sessionStorage.setItem("errorMessage", errorMsg); // Store in session storage
         }
     };
-    
+
 
     const submit = (e) => {
         e.preventDefault();
@@ -69,7 +69,7 @@ export default function Login({ status }) {
 
             <div>
                 <h3 className='text-sm uppercase'>Login To</h3>
-                <p className='font-bold text-4xl mb-6'>Your ERP Dashboard</p>
+                <p className='font-bold text-4xl mb-6'>Your Dashboard</p>
             </div>
 
             {errorMessage && <p className="text-errorRed text-sm">{errorMessage}</p>}

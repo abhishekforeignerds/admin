@@ -40,7 +40,7 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
                     // No title provided; the header won’t show.
                     links: [
 
-                        { name: "Users List", icon: <UsersIcon className="w-6 h-6" />, link: "/clients" },
+                        { name: "Users List", icon: <UsersIcon className="w-6 h-6" />, link: "/players" },
                         { name: "Games List", icon: <BiCartAdd className="w-6 h-6" />, link: "/games/" },
 
                     ],
@@ -372,28 +372,28 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
                 },
             ];
         } else if (
-            (currentPath.startsWith('/clients') || currentPath.startsWith('/vendors')) &&
+            (currentPath.startsWith('/players') || currentPath.startsWith('/vendors')) &&
             userRoles[0] === 'Super Admin'
         ) {
             return [
                 {
                     title: "Player Management",
                     links: [
-                        { name: "Players List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/clients" },
+                        { name: "Players List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/players" },
                     ],
                 },
 
             ];
         }
         else if (
-            (currentPath.startsWith('/clients') || currentPath.startsWith('/vendors')) &&
+            (currentPath.startsWith('/players') || currentPath.startsWith('/vendors')) &&
             userRoles[0] === 'Plant Head'
         ) {
             return [
                 {
                     title: "Client Management",
                     links: [
-                        { name: "Client List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/clients" },
+                        { name: "Client List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/players" },
                     ],
                 },
                 {
@@ -436,7 +436,7 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
             return "USER MANAGEMENT";
         } else if (currentPath.startsWith('/plants')) {
             return "Plant Management";
-        } else if (currentPath.startsWith('/clients')) {
+        } else if (currentPath.startsWith('/players')) {
             return "Client Management";
         }
         else if (currentPath.startsWith('/games')) {
@@ -483,7 +483,7 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
             <Sidebar />
             <div className="dashboard-content-container pl-16 max-md:pl-0">
                 <header className='relative z-10'>
-                    <nav className=" logo-topbar border-b border-gray-100 bg-white">
+                    <nav className=" logo-topbar border-b border-gray-100 bg-white" style={{ backgroundColor: ' rgb(0 0 0 / 9%)' }}>
                         <div className="mr-8 ml-12 max-w-7xl px-4 sm:px-6 lg:px-6 lg:mx-0">
                             <div className="flex h-16 justify-between">
                                 <div className="flex">

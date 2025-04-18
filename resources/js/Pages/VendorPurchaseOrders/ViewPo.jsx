@@ -9,7 +9,7 @@ export default function View({ purchaseOrder, orderedItems, plantDetails, client
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isShippingModalOpen, setIsShippingModalOpen] = useState(false);
 
-    const client = clients.find(client => String(client.id) === String(purchaseOrder.client_id));
+    const client = players.find(client => String(client.id) === String(purchaseOrder.client_id));
 
     const { auth } = usePage().props;
     const user = usePage().props.auth.user;
@@ -161,22 +161,22 @@ export default function View({ purchaseOrder, orderedItems, plantDetails, client
                                 </div>
                                 <div className='grid gap-2'>
                                     <h3 className='font-semibold text-lg mb-1 text-gray-600'>Vendor Details</h3>
-                                    <p><strong>Name :</strong>    {clients.length > 0 && purchaseOrder.client_id
-                                        ? clients.find(client => String(client.id) === String(purchaseOrder.client_id))?.company_name || 'N/A'
+                                    <p><strong>Name :</strong>    {players.length > 0 && purchaseOrder.client_id
+                                        ? players.find(client => String(client.id) === String(purchaseOrder.client_id))?.company_name || 'N/A'
                                         : 'N/A'}</p>
-                                    <p><strong>GSTIN Number :</strong>  {clients.length > 0 && purchaseOrder.client_id
-                                        ? clients.find(client => String(client.id) === String(purchaseOrder.client_id))?.gstin_number || 'N/A'
+                                    <p><strong>GSTIN Number :</strong>  {players.length > 0 && purchaseOrder.client_id
+                                        ? players.find(client => String(client.id) === String(purchaseOrder.client_id))?.gstin_number || 'N/A'
                                         : 'N/A'}</p>
-                                    <p><strong>Mobile No :  </strong>  {clients.length > 0 && purchaseOrder.client_id
-                                        ? clients.find(client => String(client.id) === String(purchaseOrder.client_id))?.mobile_number || 'N/A'
+                                    <p><strong>Mobile No :  </strong>  {players.length > 0 && purchaseOrder.client_id
+                                        ? players.find(client => String(client.id) === String(purchaseOrder.client_id))?.mobile_number || 'N/A'
                                         : 'N/A'}</p>
-                                    <p><strong>Pan No :  </strong>  {clients.length > 0 && purchaseOrder.client_id
-                                        ? clients.find(client => String(client.id) === String(purchaseOrder.client_id))?.pan_card || 'N/A'
+                                    <p><strong>Pan No :  </strong>  {players.length > 0 && purchaseOrder.client_id
+                                        ? players.find(client => String(client.id) === String(purchaseOrder.client_id))?.pan_card || 'N/A'
                                         : 'N/A'}</p>
-                                    <p><strong>Address : </strong> {clients.length > 0 && purchaseOrder.client_id
-                                        ? clients.find(client => String(client.id) === String(purchaseOrder.client_id))?.company_name || 'N/A'
-                                        : 'N/A'}<br></br> {clients.length > 0 && purchaseOrder.client_id
-                                            ? clients.find(client => String(client.id) === String(purchaseOrder.client_id))?.company_address || 'N/A'
+                                    <p><strong>Address : </strong> {players.length > 0 && purchaseOrder.client_id
+                                        ? players.find(client => String(client.id) === String(purchaseOrder.client_id))?.company_name || 'N/A'
+                                        : 'N/A'}<br></br> {players.length > 0 && purchaseOrder.client_id
+                                            ? players.find(client => String(client.id) === String(purchaseOrder.client_id))?.company_address || 'N/A'
                                             : 'N/A'}</p>
                                 </div>
                             </div>

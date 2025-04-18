@@ -32,7 +32,7 @@ export default function Login({ status, canResetPassword }) {
             )}
             <div>
                 <h3 className='text-sm uppercase'>Login To</h3>
-                <p className='font-bold text-4xl mb-6'>Your ERP Dashboard</p>
+                <p className='font-bold text-4xl mb-6'>Your Dashboard</p>
             </div>
             <form onSubmit={submit}>
                 <div>

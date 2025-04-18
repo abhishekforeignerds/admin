@@ -72,12 +72,12 @@ const Sidebar = () => {
           )}
 
           {/* Finished Goods / Raw Materials Link */}
-          {userPermissions.includes("view clients") && (
+          {userPermissions.includes("view players") && (
             <div className="relative group">
-              <Link href={route("clients.index")}>
+              <Link href={route("players.index")}>
                 <a
                   className={getSidebarLinkClass(
-                    (currentRoute.startsWith("clients") || currentRoute.startsWith("vendors"))
+                    (currentRoute.startsWith("players") || currentRoute.startsWith("vendors"))
                   )}
                 >
                   <BsShop className="text-xl" />

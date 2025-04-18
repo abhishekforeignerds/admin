@@ -205,7 +205,7 @@ export default function Create({ clients, plants, finishedGoods, materials = [] 
                                 className="w-full mt-1 border-gray-300 rounded-md shadow-sm p-2"
                             >
                                 <option value="">Select Vendor</option>
-                                {clients.map(client => (
+                                {players.map(client => (
                                     <option key={client.id} value={client.id}>
                                         {client.name}
                                     </option>
@@ -407,7 +407,7 @@ export default function Create({ clients, plants, finishedGoods, materials = [] 
                         <strong>Expected Delivery Date:</strong> {data.expected_delivery_date ? new Date(data.expected_delivery_date).toLocaleDateString('en-IN') : 'N/A'}
                     </p>
                     <p>
-                        <strong>Vendor:</strong> {clients.find(client => String(client.id) === String(data.client_id))?.name || 'N/A'}
+                        <strong>Vendor:</strong> {players.find(client => String(client.id) === String(data.client_id))?.name || 'N/A'}
                     </p>
                     <p>
                         <strong>Plant:</strong> {plants.find(plant => String(plant.id) === String(data.plant_id))?.plant_name || 'N/A'}

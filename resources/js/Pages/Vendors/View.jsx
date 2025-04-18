@@ -48,12 +48,12 @@ export default function View({ users, statusCounts }) {
     };
 
     // Pagination calculations
-    const totalRows = filteredClients.length;
+    const totalRows = filteredplayers.length;
     const totalPages = Math.ceil(totalRows / rowsPerPage);
     const currentPageSafe = Math.min(currentPage, totalPages); // Ensure page number is within bounds
     const indexOfLastRow = currentPageSafe * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-    const currentVendor = filteredClients.slice(indexOfFirstRow, indexOfLastRow);
+    const currentVendor = filteredplayers.slice(indexOfFirstRow, indexOfLastRow);
 
     return (
         <AuthenticatedLayout

@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 // import { usePage } from '@inertiajs/react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { filterByDate, filterOptions } from '@/Components/filterUtils';
+import { filterByDate, filterOptions } from '@/Components/FilterUtils';
 
 const View = ({ gameResults }) => {
     // Convert the gameResults (grouped by game_id) object into an array.

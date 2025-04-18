@@ -13,6 +13,8 @@ export default function Create({ message, roles, plants, rolespermissions }) {
         mobile_number: '',
         role: '',
         plant_id: '',
+        pan_card: '',
+        gstin_number: '',
     });
 
     const handleSubmit = (e) => {
@@ -139,6 +141,26 @@ export default function Create({ message, roles, plants, rolespermissions }) {
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm" placeholder='Enter Mobile Number'
                                         />
                                         {errors.mobile_number && <div className="text-errorRed text-sm">{errors.mobile_number}</div>}
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700">Commission Percentage*</label>
+                                        <input
+                                            type="text"
+                                            value={data.gstin_number}
+                                            onChange={(e) => setData('gstin_number', e.target.value)}
+                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm" placeholder='Enter Mobile Number'
+                                        />
+                                        {errors.gstin_number && <div className="text-errorRed text-sm">{errors.gstin_number}</div>}
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700">Balance*</label>
+                                        <input
+                                            type="text"
+                                            value={data.pan_card}
+                                            onChange={(e) => setData('pan_card', e.target.value)}
+                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm" placeholder='Enter Mobile Number'
+                                        />
+                                        {errors.pan_card && <div className="text-errorRed text-sm">{errors.pan_card}</div>}
                                     </div>
 
 

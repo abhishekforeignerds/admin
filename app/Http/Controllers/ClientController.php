@@ -7,6 +7,7 @@ use App\Models\Notification;
 use App\Models\Users;
 use App\Models\User;
 use App\Models\Plant;
+use App\Models\Fund;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
@@ -82,7 +83,7 @@ class ClientController extends Controller
         'notification_url'  => 'clients',
     ]);
 
-    return redirect()->route('clients.index')->with('success', 'Client created successfully.');
+    return redirect()->route('players.index')->with('success', 'Client created successfully.');
 }
 
     public function edit($id)
@@ -94,6 +95,38 @@ class ClientController extends Controller
         // print_r($user);die;
     
         return Inertia::render('Players/Edit', ['client' => $user, 'roles' => $roles, 'plants' => $plants]);
+    }
+    public function addfund($id)
+    {
+        $user = Users::findOrFail($id);
+        $roles = Role::all();
+        $plants =  Plant::where('status', 'active')->get();
+        // echo '<pre>';
+        // print_r($user);die;
+    
+        return Inertia::render('Players/AddFund', ['client' => $user, 'roles' => $roles, 'plants' => $plants]);
+    }
+    public function storefund(Request $request, $id)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:user,id',
+            'amount' => 'required|numeric|min:0',
+            'reference_number' => 'required|string|unique:funds,reference_number',
+            'modeOfPayment' => 'required',
+        ]);
+
+        $fund = Fund::create([
+            'user_id' => $request->user_id,
+            'amount' => $request->amount,
+            'reference_number' => $request->reference_number,
+        ]);
+        $user = Users::findOrFail($id);
+        $user->update([
+            'points' => $user->points + $request->amount,
+        ]);
+       // Redirect to a valid Inertia route with a flash message.
+       return redirect()->route('players.index')
+       ->with('success', 'Fund entry created successfully.');
     }
       public function view($id)
     {
@@ -167,7 +200,7 @@ class ClientController extends Controller
             'notification_url'  => 'clients',
         ]);
     
-        return redirect()->route('clients.index')->with('success', 'Client updated successfully.');
+        return redirect()->route('players.index')->with('success', 'Client updated successfully.');
     }
     public function suspend($id)
     {
@@ -180,6 +213,8 @@ class ClientController extends Controller
         ]);
 
         // Redirect back with a success message
-        return redirect()->route('clients.index')->with('success', 'Client suspended successfully.');
+        return redirect()->route('players.index')->with('success', 'Client suspended successfully.');
     }
+
+    
 }

@@ -97,7 +97,7 @@
 import React, { useState } from "react";
 import { getStatusText, getStatusClass } from "./../../../utils/statusUtils";
 import RequestStockModal from "./RequestStockModal";
-import { filterByDate, filterOptions } from "@/Components/filterUtils";
+import { filterByDate, filterOptions } from "@/Components/FilterUtils";
 
 
 
@@ -129,7 +129,7 @@ const LowStockAlerts = ({ lowStockRawMaterialstable = [], lowStockFinishGoodtabl
     };
 
     // Apply date filter based on selected option
-    const filteredStock = combinedLowStock.filter(material => 
+    const filteredStock = combinedLowStock.filter(material =>
         filterByDate(material.created_at, selectedFilter)
     );
 

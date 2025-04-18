@@ -119,8 +119,8 @@ export default function View({ games, statusCounts }) {
                                     <thead>
                                         <tr>
                                             <th className="px-2 py-3 border-b text-red text-left text-sm">Game Name</th>
-                                            <th className="px-2 py-3 border-b text-red text-left text-sm">Winning Percentage</th>
-                                            <th className="px-2 py-3 border-b text-red text-left text-sm">Override Chance</th>
+                                            <th className="px-2 py-3 border-b text-red text-left text-sm">Game Category</th>
+                                            {/* <th className="px-2 py-3 border-b text-red text-left text-sm">Override Chance</th> */}
                                             <th className="px-2 py-3 border-b text-red text-left text-sm">Game Type</th>
                                             <th className="px-2 py-3 border-b text-red text-left text-sm">Spin Time</th>
                                             <th className="px-2 py-3 border-b text-red text-left text-sm">Min Bet</th>
@@ -132,8 +132,8 @@ export default function View({ games, statusCounts }) {
                                         {games.map(game => (
                                             <tr key={game.id} className="border-b">
                                                 <td className="px-2 py-3 text-sm">{game.game_name}</td>
-                                                <td className="px-2 py-3 text-sm">{game.winning_percentage}</td>
-                                                <td className="px-2 py-3 text-sm">{game.override_chance}</td>
+                                                <td className="px-2 py-3 text-sm">{game.game_category}</td>
+                                                {/* <td className="px-2 py-3 text-sm">{game.override_chance}</td> */}
                                                 <td className="px-2 py-3 text-sm">{game.game_type}</td>
                                                 <td className="px-2 py-3 text-sm">{game.game_spin_time} sec</td>
                                                 <td className="px-2 py-3 text-sm">{game.min_bet}</td>

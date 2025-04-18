@@ -20,7 +20,7 @@ export default function Edit({ client }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(route('clients.update', client.id));
+        put(route('players.update', client.id));
     };
 
     return (
@@ -38,12 +38,12 @@ export default function Edit({ client }) {
                     <p className="flex flex-wrap">
                         <Link href={route('dashboard')}>Dashboard</Link>
                         <FiChevronRight size={24} color="black" />
-                        <Link href={route('clients.index')}> Clients Management</Link>
+                        <Link href={route('players.index')}> Clients Management</Link>
                         <FiChevronRight size={24} color="black" />
                         <span className="text-red">Edit Client</span>
                     </p>
                     <Link
-                        href={route('clients.index')}
+                        href={route('players.index')}
                         className="border border-red py-1 px-14 text-red rounded max-w-max"
                     >
                         Back

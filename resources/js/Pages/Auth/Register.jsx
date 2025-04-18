@@ -36,7 +36,7 @@ export default function Register() {
 
             <div>
                 <h3 className='text-sm uppercase'>register to</h3>
-                <p className='font-bold text-4xl mb-6'>Your ERP Dashboard</p>
+                <p className='font-bold text-4xl mb-6'>Your Dashboard</p>
             </div>
 
             <form className='2-col-form grid grid-cols-2 gap-2' onSubmit={submit}>

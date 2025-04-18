@@ -105,7 +105,7 @@ export default function Edit({ purchaseOrder, clients, plants, finishedGoods, or
     // Update vendorMaterials when vendor selection changes
     useEffect(() => {
         if (data.client_id) {
-            const vendor = clients.find(client => String(client.id) === String(data.client_id));
+            const vendor = players.find(client => String(client.id) === String(data.client_id));
             if (vendor && vendor.vendor_materials) {
                 setVendorMaterials(vendor.vendor_materials);
             } else {
@@ -245,7 +245,7 @@ export default function Edit({ purchaseOrder, clients, plants, finishedGoods, or
                                                     className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
                                                 >
                                                     <option value="">Select Vendor</option>
-                                                    {clients.map((client) => (
+                                                    {players.map((client) => (
                                                         <option key={client.id} value={client.id}>
                                                             {client.company_name}
                                                         </option>
@@ -473,32 +473,32 @@ export default function Edit({ purchaseOrder, clients, plants, finishedGoods, or
                                             <h3 className="font-semibold text-lg mb-1 text-black">Vendor Details</h3>
                                             <p>
                                                 <strong>Name:</strong>{' '}
-                                                {clients.length > 0 && data.client_id
-                                                    ? clients.find(client => String(client.id) === String(data.client_id))?.company_name || 'N/A'
+                                                {players.length > 0 && data.client_id
+                                                    ? players.find(client => String(client.id) === String(data.client_id))?.company_name || 'N/A'
                                                     : 'N/A'}
                                             </p>
                                             <p>
                                                 <strong>GSTIN Number:</strong>{' '}
-                                                {clients.length > 0 && data.client_id
-                                                    ? clients.find(client => String(client.id) === String(data.client_id))?.gstin_number || 'N/A'
+                                                {players.length > 0 && data.client_id
+                                                    ? players.find(client => String(client.id) === String(data.client_id))?.gstin_number || 'N/A'
                                                     : 'N/A'}
                                             </p>
                                             <p>
                                                 <strong>Mobile No:</strong>{' '}
-                                                {clients.length > 0 && data.client_id
-                                                    ? clients.find(client => String(client.id) === String(data.client_id))?.mobile_number || 'N/A'
+                                                {players.length > 0 && data.client_id
+                                                    ? players.find(client => String(client.id) === String(data.client_id))?.mobile_number || 'N/A'
                                                     : 'N/A'}
                                             </p>
                                             <p>
                                                 <strong>Pan No:</strong>{' '}
-                                                {clients.length > 0 && data.client_id
-                                                    ? clients.find(client => String(client.id) === String(data.client_id))?.pan_card || 'N/A'
+                                                {players.length > 0 && data.client_id
+                                                    ? players.find(client => String(client.id) === String(data.client_id))?.pan_card || 'N/A'
                                                     : 'N/A'}
                                             </p>
                                             <p>
                                                 <strong>Address:</strong>{' '}
-                                                {clients.length > 0 && data.client_id
-                                                    ? clients.find(client => String(client.id) === String(data.client_id))?.company_address || 'N/A'
+                                                {players.length > 0 && data.client_id
+                                                    ? players.find(client => String(client.id) === String(data.client_id))?.company_address || 'N/A'
                                                     : 'N/A'}
                                             </p>
                                         </div>

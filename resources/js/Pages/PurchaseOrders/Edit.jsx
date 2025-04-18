@@ -230,7 +230,7 @@ export default function Edit({ purchaseOrder, clients, plants, finishedGoods, or
                                                     className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
                                                 >
                                                     <option value="">Select Client</option>
-                                                    {clients.map(client => (
+                                                    {players.map(client => (
                                                         <option key={client.id} value={client.id}>{client.company_name}</option>
                                                     ))}
                                                 </select>
@@ -445,22 +445,22 @@ export default function Edit({ purchaseOrder, clients, plants, finishedGoods, or
                                             </div>
                                             <div className='grid gap-2'>
                                                 <h3 className='font-semibold text-lg mb-1 text-black '>Client Details</h3>
-                                                <p><strong>Name :</strong>    {clients.length > 0 && data.client_id
-                                                    ? clients.find(client => String(client.id) === String(data.client_id))?.company_name || 'N/A'
+                                                <p><strong>Name :</strong>    {players.length > 0 && data.client_id
+                                                    ? players.find(client => String(client.id) === String(data.client_id))?.company_name || 'N/A'
                                                     : 'N/A'}</p>
-                                                <p><strong>GSTIN Number :</strong>  {clients.length > 0 && data.client_id
-                                                    ? clients.find(client => String(client.id) === String(data.client_id))?.gstin_number || 'N/A'
+                                                <p><strong>GSTIN Number :</strong>  {players.length > 0 && data.client_id
+                                                    ? players.find(client => String(client.id) === String(data.client_id))?.gstin_number || 'N/A'
                                                     : 'N/A'}</p>
-                                                <p><strong>Mobile No :  </strong>  {clients.length > 0 && data.client_id
-                                                    ? clients.find(client => String(client.id) === String(data.client_id))?.mobile_number || 'N/A'
+                                                <p><strong>Mobile No :  </strong>  {players.length > 0 && data.client_id
+                                                    ? players.find(client => String(client.id) === String(data.client_id))?.mobile_number || 'N/A'
                                                     : 'N/A'}</p>
-                                                <p><strong>Pan No :  </strong>  {clients.length > 0 && data.client_id
-                                                    ? clients.find(client => String(client.id) === String(data.client_id))?.pan_card || 'N/A'
+                                                <p><strong>Pan No :  </strong>  {players.length > 0 && data.client_id
+                                                    ? players.find(client => String(client.id) === String(data.client_id))?.pan_card || 'N/A'
                                                     : 'N/A'}</p>
-                                                <p><strong>Address : </strong> {clients.length > 0 && data.client_id
-                                                    ? clients.find(client => String(client.id) === String(data.client_id))?.name || 'N/A'
-                                                    : 'N/A'}<br></br> {clients.length > 0 && data.client_id
-                                                        ? clients.find(client => String(client.id) === String(data.client_id))?.company_address || 'N/A'
+                                                <p><strong>Address : </strong> {players.length > 0 && data.client_id
+                                                    ? players.find(client => String(client.id) === String(data.client_id))?.name || 'N/A'
+                                                    : 'N/A'}<br></br> {players.length > 0 && data.client_id
+                                                        ? players.find(client => String(client.id) === String(data.client_id))?.company_address || 'N/A'
                                                         : 'N/A'}</p>
                                             </div>
                                         </div>
