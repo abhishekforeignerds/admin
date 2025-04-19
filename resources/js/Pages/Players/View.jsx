@@ -204,6 +204,18 @@ export default function View({ users, allusers }) {
                                                 >
                                                     Add Fund
                                                 </Link>
+                                                <Link
+                                                    className="text-right bg-red px-8 py-2 rounded-md text-white block max-w-max ml-auto mb-4"
+                                                    href={route('players.createticket', user.id)}
+                                                >
+                                                    Create Ticket
+                                                </Link>
+                                                <Link
+                                                    className="text-right bg-red px-8 py-2 rounded-md text-white block max-w-max ml-auto mb-4"
+                                                    href={route('players.viewticket', user.id)}
+                                                >
+                                                    View Ticket
+                                                </Link>
                                                 <button
                                                     type="button"
                                                     className="flex justify-center items-center size-9 text-sm font-semibold rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50"

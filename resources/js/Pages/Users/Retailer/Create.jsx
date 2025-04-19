@@ -26,6 +26,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
         plant_id: '',
         pan_card: '',
         gstin_number: '',
+        company_name: '',
         // default in the sub_admin_id we found (or blank)
         sub_admin_id: initialSubAdminId,
         // and stockit_id set to the user’s own ID if they’re Stockit
@@ -136,6 +137,19 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                                             <option value="inactive">Inactive</option>
                                         </select>
                                         {errors.status && <div className="text-errorRed text-sm">{errors.status}</div>}
+                                    </div>
+                                    < div className="mb-4">
+                                        <label className="block text-gray-700">For Device*</label>
+                                        <select
+                                            value={data.company_name}
+                                            onChange={(e) => setData('company_name', e.target.value)}
+                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
+                                        >
+                                            <option value="">Select Device</option>
+                                            <option value="desktop">Desktop</option>
+                                            <option value="phone">Phone</option>
+                                        </select>
+                                        {errors.company_name && <div className="text-errorRed text-sm">{errors.company_name}</div>}
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-gray-700">Email Address*</label>

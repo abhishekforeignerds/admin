@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { Link } from '@inertiajs/react';
 import { FiChevronRight } from 'react-icons/fi';
 
-export default function Create(retailerUsers) {
-    // console.log('retailerUsers', retailerUsers.retailerUsers)
+export default function Create(retailerUsers, retailer) {
+    console.log('retailer', retailer)
     const { auth } = usePage().props; // Get user data from Inertia
     const userRoles = auth?.user?.roles || [];
     const [activeTab, setActiveTab] = useState("All");
@@ -19,13 +19,19 @@ export default function Create(retailerUsers) {
         email: '',
         username: '',
         password: '',
-        points: '0',
+        points: '',
         retailer_id: userRoles[0] === 'Retailer' ? auth.user.id : '',
         winning_percentage: 70,
         override_chance: 0.3,
     });
+    const isRetailer = userRoles.includes('Retailer');
 
 
+    // Find the stockitUsers record for the logged‑in user
+    const currentStockit = isRetailer
+        ? retailerUsers.retailerUsers.find(u => u.id === auth.user.id)
+        : null;
+    const balance = currentStockit ? currentStockit.pan_card : '';
     const handleSubmit = (e) => {
         e.preventDefault();
         post(route('players.store'));
@@ -61,6 +67,9 @@ export default function Create(retailerUsers) {
                 <div className="mx-auto py-6">
                     <div className="bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 min-h-[80vh]">
+                            <div className="top-search-bar-box flex py-4">
+                                <h2 className="font-semibold text-3xl mb-6">Your Balance : {balance}</h2>
+                            </div>
                             <div className="top-search-bar-box flex py-4">
                                 <h2 className="font-semibold text-3xl mb-6">Add Player</h2>
                             </div>
@@ -173,7 +182,7 @@ export default function Create(retailerUsers) {
                                         {errors.password && <div className="text-red-600">{errors.password}</div>}
                                     </div>
                                     {/* Points */}
-                                    {/* <div className="mb-4">
+                                    <div className="mb-4">
                                         <label className="block text-gray-700">Points*</label>
                                         <input
                                             type="number"
@@ -183,7 +192,7 @@ export default function Create(retailerUsers) {
                                             placeholder="Enter Points"
                                         />
                                         {errors.points && <div className="text-red-600">{errors.points}</div>}
-                                    </div> */}
+                                    </div>
                                     {/* Winning Percentage */}
                                     {userPermissions.includes("winningpercentage players") && (
                                         <div className="mb-4">

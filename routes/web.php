@@ -169,10 +169,14 @@ use App\Http\Controllers\ClientController;
 Route::middleware(['auth', 'dynamic.permission'])->group(function () {
     Route::resource('players', ClientController::class);
     Route::get('players/{id}/view', [ClientController::class, 'view'])->name('players.view');
+    Route::get('players/{id}/createticket', [ClientController::class, 'createticket'])->name('players.createticket');
+    
     Route::get('players/{id}/addfund', [ClientController::class, 'addfund'])->name('players.addfund');
     Route::put('players/{id}/storefund', [ClientController::class, 'storefund'])->name('players.storefund');
     Route::get('players/{id}/suspend', [ClientController::class, 'suspend'])->name('players.suspend');
 });
+Route::get('players/{id}/viewticket', [ClientController::class, 'viewticket'])->name('players.viewticket');
+Route::put('players/{id}/storeticket', [ClientController::class, 'storeticket'])->name('players.storeticket');
 use App\Http\Controllers\VendorController;
     // Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'dynamic.permission'])->group(function () {

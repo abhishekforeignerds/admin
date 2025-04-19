@@ -142,6 +142,7 @@ export default function View({ users, statusCounts }) {
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Mobile</th>
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Status</th>
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Balance</th>
+                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Device</th>
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Actions</th>
                                     </tr>
                                 </thead>
@@ -164,6 +165,12 @@ export default function View({ users, statusCounts }) {
                                                 </td>
                                                 <td className="px-2 py-3 border-b text-sm">
                                                     {(Number(user.pan_card) || 0).toLocaleString('en-IN')}
+                                                </td>
+                                                <td className="px-2 py-3 border-b text-sm">
+                                                    {user.company_name
+                                                        ? user.company_name.charAt(0).toUpperCase() + user.company_name.slice(1)
+                                                        : 'N/A'}
+
                                                 </td>
                                                 <td className="px-2 py-3 border-b text-sm relative">
                                                     {userPermissions.includes('view users') && (

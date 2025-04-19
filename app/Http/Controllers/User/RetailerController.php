@@ -71,6 +71,7 @@ class RetailerController extends Controller
             'gstin_number'    => 'nullable|string',
             'pan_card'        => 'nullable|string',
             'state_code'      => 'nullable|string',
+            'company_name'      => 'nullable|string',
             'plant_id'        => ['nullable','integer','exists:plants,id'],
             'company_address' => 'nullable|string',
             // New field: how much to seed/transfer
@@ -102,12 +103,13 @@ class RetailerController extends Controller
                     'status'           => $validated['status'],
                     'company_name'     => $validated['company_name']   ?? null,
                     'gstin_number'     => $validated['gstin_number']   ?? null,
-                    'pan_card'         => $validated['pan_card'],    // start at zero
+                    'pan_card'         => 0,    // start at zero
                     'state_code'       => $validated['state_code']     ?? null,
                     'plant_assigned'   => $validated['plant_id']       ?? null,
                     'company_address'  => $validated['company_address']?? null,
                     'stockit_id'       => $validated['stockit_id'],
                     'sub_admin_id'     => $validated['sub_admin_id'],
+                    'company_name'     => $validated['company_name'],
                 ]);
                
                 
@@ -158,11 +160,7 @@ class RetailerController extends Controller
         return redirect()
             ->route('retailer.index')
             ->with('success', 'User created successfully.');
-    }
-    public function createticket($id)
-    {
-        return Inertia::render('User/Retailer/Ticket');
-    }   
+    }  
 
     public function storefund(Request $request, $id)
     {

@@ -6,12 +6,19 @@ use App\Models\GameResults;
 use App\Models\Notification;
 use App\Models\Users;
 use App\Models\User;
+use App\Models\Ticket;
+use App\Models\UserPointsSale;
 use App\Models\Plant;
 use App\Models\Fund;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
 use Illuminate\Validation\Rule;
+
+use Illuminate\Support\Facades\Storage;
+use Milon\Barcode\Facades\DNS1DFacade as DNS1D;                       // ← now resolves to Milon\Barcode\Facades\DNS1DFacade
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class ClientController extends Controller
 {
@@ -29,7 +36,8 @@ class ClientController extends Controller
     {
         $roles = Role::all();
         $plants =  Plant::where('status', 'active')->get();
-        return Inertia::render('Players/Create', ['roles' => $roles, 'plants' => $plants, 'retailerUsers'  => User::role('Retailer')->get(['id','name']),]);
+        
+        return Inertia::render('Players/Create', ['roles' => $roles, 'plants' => $plants, 'retailerUsers'  => User::get(['id','name','pan_card']),]);
     }
 
     public function store(Request $request)
@@ -82,6 +90,15 @@ class ClientController extends Controller
     if ($sub->pan_card < $validated['points']) {
         throw new \Exception('Low Balance');
     }
+
+    $fund = UserPointsSale::create([
+        'from_id' => auth()->id(),
+        'user_id' => $user->id,
+        'amount' => $request->points,
+        'reference_number' => $request->reference_number ?? mt_rand(10000000, 99999999),
+
+    ]);
+
     $user->update([
         'points' => $request->points,
     ]);
@@ -130,7 +147,8 @@ class ClientController extends Controller
             'modeOfPayment' => 'required',
         ]);
 
-        $fund = Fund::create([
+        $fund = UserPointsSale::create([
+            'from_id' => auth()->id(),
             'user_id' => $request->user_id,
             'amount' => $request->amount,
             'reference_number' => $request->reference_number,
@@ -138,7 +156,8 @@ class ClientController extends Controller
         $user = Users::findOrFail($id);
         $sub = User::findOrFail($user->stockit_id);
         if ($sub->pan_card < $user->points) {
-            throw new \Exception('Low Balance');
+            return redirect()->route('players.index')
+       ->with('success', 'You are on Low Balance.');
         }
         $user->update([
             'points' => $user->points + $request->amount,
@@ -237,5 +256,60 @@ class ClientController extends Controller
         return redirect()->route('players.index')->with('success', 'Client suspended successfully.');
     }
 
+    public function createticket($id)
+    {
+        $user = Users::findOrFail($id);
+        return Inertia::render('Players/Ticket', ['user' => $user]);
+    } 
+
+    public function storeticket(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'amount'    => 'required|integer',
+            'card_name' => 'required|string',
+        ]);
+    
+        // build our special serial
+        $now    = Carbon::now()->format('YmdHis');
+        $amt    = $validated['amount'];
+        $card   = Str::upper(Str::substr($validated['card_name'], 0, 3));
+        $serial = "{$now}-{$amt}-{$card}-U{$id}-R" . auth()->id();
+    
+        // create the ticket record
+        $ticket = Ticket::create([
+            'user_id'       => $id,
+            'retailer_id'   => auth()->id(),
+            'serial_number'=> $serial,
+            'amount'        => $amt,
+            'card_name'     => $validated['card_name'],
+        ]);
+    
+        // generate barcode PNG (Code 39) and save it
+        $pngData = DNS1D::getBarcodePNG($serial, 'C39');
+
+        // File name with path under /public/barcodes
+        $filename = $serial . '.png';
+        $fullPath = public_path('barcodes/' . $filename);
+        
+        // Make sure the barcodes directory exists
+        if (!file_exists(public_path('barcodes'))) {
+            mkdir(public_path('barcodes'), 0755, true);
+        }
+        
+        // Save the barcode image directly to public/barcodes
+        file_put_contents($fullPath, base64_decode($pngData));
+        
+    
+        // update the ticket with the path
+        $ticket->update(['bar_code_scanner' =>  '/barcodes/'.$filename]);
+    
+        return response()->json(['success' => true, 'ticket' => $ticket]);
+    }
+    public function viewticket(Request $request, $id)
+    {
+        $user = Users::findOrFail($id);
+        $tickets = Ticket::where('user_id', $id)->get();
+        return Inertia::render('Players/ViewTicket', ['user' => $user, 'tickets' => $tickets]);
+    }
     
 }

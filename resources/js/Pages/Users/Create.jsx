@@ -126,22 +126,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                                             {errors.stockit_id && <div className="text-errorRed text-sm">{errors.stockit_id}</div>}
                                         </div>
                                     )}
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700">Assign Plant</label>
-                                        <select
-                                            value={data.plant_id}
-                                            onChange={(e) => setData('plant_id', e.target.value)}
-                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                        >
-                                            <option value="">Select Plant</option>
-                                            {plants.map((plant) => (
-                                                <option key={plant.id} value={plant.id}>
-                                                    {plant.plant_name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {errors.plant_id && <div className="text-errorRed text-sm">{errors.plant_id}</div>}
-                                    </div>
+
                                     <div className="mb-4">
                                         <label className="block text-gray-700">Status*</label>
                                         <select
