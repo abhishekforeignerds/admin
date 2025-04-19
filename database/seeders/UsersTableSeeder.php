@@ -14,14 +14,9 @@ class UsersTableSeeder extends Seeder
         $faker = Faker::create('en_IN');
 
         // Define plant IDs and the roles to assign
-        $plantIds = [2, 3, 4];
+        $plantIds = [1];
         $roles = [
-            'Production Manager',
-            'Plant Head',
-            'Store Manager',
-            'Client',
-            'Vendor',
-            'Security Guard'
+            'Super Admin',
         ];
 
         foreach ($plantIds as $plantId) {

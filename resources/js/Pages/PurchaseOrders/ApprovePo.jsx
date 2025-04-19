@@ -81,18 +81,18 @@ export default function View({ purchaseOrder, orderedItems, plantDetails, plantf
                     const roundedOrderQty = Math.round(item.quantity);
                     const available = plantfg.quantity >= roundedOrderQty;
 
-                    // console.log(
+                    // // console.log(
                     //     `Item Code: ${item.item_code}, Order Quantity: ${roundedOrderQty} (Rounded from ${item.quantity}), Plant Quantity: ${plantfg.quantity}, Available: ${available}`
                     // );
 
                     return available ? count : count + 1;
                 } else {
-                    // console.log(`Item Code: ${item.item_code} not found in plantfgs`);
+                    // // console.log(`Item Code: ${item.item_code} not found in plantfgs`);
                     return count + 1;
                 }
             }, 0); // Initial count is 0
 
-        // console.log(`Total Unavailable Items: ${unavailableCount}`);
+        // // console.log(`Total Unavailable Items: ${unavailableCount}`);
         return unavailableCount; // Return the number of unavailable items
 
 
@@ -263,41 +263,41 @@ export default function View({ purchaseOrder, orderedItems, plantDetails, plantf
     const isAvailable = (item) => {
         // Items that are "in_progress" are considered available.
         if (item.status === 'in_progress') {
-            console.log(`Item ${item.item_code} is in progress, considered available.`);
+            // console.log(`Item ${item.item_code} is in progress, considered available.`);
             return true;
         }
-        console.log(`Item ${item.item_code}`);
-        console.log(`groupedFinishedGoods ${groupedFinishedGoods} .`);
+        // console.log(`Item ${item.item_code}`);
+        // console.log(`groupedFinishedGoods ${groupedFinishedGoods} .`);
 
         const group = groupedFinishedGoods[item.item_code];
-        console.log(`Group ${group}. Assuming available.`);
+        // console.log(`Group ${group}. Assuming available.`);
         if (!group) {
-            console.log(`No conversion group found for item ${item.item_code}. Assuming available.`);
+            // console.log(`No conversion group found for item ${item.item_code}. Assuming available.`);
             return true;
         }
 
         const gramsPerPiece = group.total_quantity_required || 1;
-        console.log(`Item ${item.item_code}: gramsPerPiece = ${gramsPerPiece}`);
+        // console.log(`Item ${item.item_code}: gramsPerPiece = ${gramsPerPiece}`);
 
         // Convert the ordered quantity into pieces.
         const orderedQuantityInPieces = item.unit === 'Kgs'
             ? Math.ceil((parseFloat(item.quantity) * 1000) / gramsPerPiece)
             : Math.ceil(item.quantity);
-        console.log(`Item ${item.item_code}: Ordered Quantity = ${item.quantity} ${item.unit}, converted to ${orderedQuantityInPieces} pieces`);
+        // console.log(`Item ${item.item_code}: Ordered Quantity = ${item.quantity} ${item.unit}, converted to ${orderedQuantityInPieces} pieces`);
 
         const plantfg = plantfgs.find(p => p.item_code === item.item_code);
         if (!plantfg) {
-            console.log(`No plant finished good found for item ${item.item_code}. Marking as unavailable.`);
+            // console.log(`No plant finished good found for item ${item.item_code}. Marking as unavailable.`);
             return false;
         }
 
         const plantAvailableQuantityInPieces = plantfg.unit === 'Kgs'
             ? Math.floor((parseFloat(plantfg.quantity) * 1000) / gramsPerPiece)
             : Math.floor(plantfg.quantity);
-        console.log(`Item ${item.item_code}: Plant Available Quantity = ${plantfg.quantity} ${plantfg.unit}, converted to ${plantAvailableQuantityInPieces} pieces`);
+        // console.log(`Item ${item.item_code}: Plant Available Quantity = ${plantfg.quantity} ${plantfg.unit}, converted to ${plantAvailableQuantityInPieces} pieces`);
 
         const available = plantAvailableQuantityInPieces >= orderedQuantityInPieces;
-        console.log(`Item ${item.item_code}: Available? ${available} (${plantAvailableQuantityInPieces} >= ${orderedQuantityInPieces})`);
+        // console.log(`Item ${item.item_code}: Available? ${available} (${plantAvailableQuantityInPieces} >= ${orderedQuantityInPieces})`);
 
         return available;
     };
@@ -787,8 +787,8 @@ export default function View({ purchaseOrder, orderedItems, plantDetails, plantf
 
                             />
 
-                            {console.log('availabilityStatus')}
-                            {console.log(availabilityStatus)}
+                            {// console.log('availabilityStatus')}
+                                {// console.log(availabilityStatus)}
 
                             {(availabilityStatus == 'all_unavailable' || availabilityStatus == 'all_available') && (
                                 <StatusUpdateForm

@@ -1,7 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { Head, useForm, usePage } from '@inertiajs/react'
+import { Head, useForm } from '@inertiajs/react'
 import { Link } from '@inertiajs/react'
-import React, { useState } from 'react';
 import { FiChevronRight } from 'react-icons/fi'
 
 export default function Create({ message, roles, plants, subAdmins, stockitUsers }) {
@@ -11,7 +10,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
         password: '',
         status: '',
         mobile_number: '',
-        role: '',
+        role: 'Stockit',
         plant_id: '',
         pan_card: '',
         gstin_number: '',
@@ -21,17 +20,13 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        post(route('users.store'))
+        post(route('stockit.store'))
     }
 
+    const filteredRoles = roles.filter(
+        (role) => !['Super Admin', 'Retailer', 'Super Admin'].includes(role.name)
+    );
 
-    const { auth } = usePage().props; // Get user data from Inertia
-    const userRoles = auth?.user?.roles || [];
-    const [activeTab, setActiveTab] = useState("All");
-    const userPermissions =
-        auth?.user?.rolespermissions?.flatMap((role) => role.permissions) || [];
-
-    const filteredRoles = roles.filter((role) => role.name !== 'Super Admin')
 
     return (
         <AuthenticatedLayout
@@ -47,11 +42,11 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                     <p className="flex">
                         <Link href={route('dashboard')}>Dashboard</Link>
                         <FiChevronRight size={24} color="black" />
-                        <Link href={route('users.index')}>Users Management</Link>
+                        <Link href={route('stockit.index')}>Users Management</Link>
                         <FiChevronRight size={24} color="black" />
                         <span className="text-red">Create User</span>
                     </p>
-                    <Link href={route('users.index')} className="border border-red py-1 px-14 text-red rounded max-w-max">
+                    <Link href={route('stockit.index')} className="border border-red py-1 px-14 text-red rounded max-w-max">
                         Back
                     </Link>
                 </div>
@@ -109,7 +104,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                                         </div>
                                     )}
                                     {data.role === 'Retailer' && (
-                                        <div className="mb-4">
+                                        <div className="mb-4" hidden>
                                             <label className="block text-gray-700">Select Stockit User*</label>
                                             <select
                                                 value={data.stockit_id}
@@ -126,7 +121,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                                             {errors.stockit_id && <div className="text-errorRed text-sm">{errors.stockit_id}</div>}
                                         </div>
                                     )}
-                                    <div className="mb-4">
+                                    {/* <div className="mb-4">
                                         <label className="block text-gray-700">Assign Plant</label>
                                         <select
                                             value={data.plant_id}
@@ -141,7 +136,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                                             ))}
                                         </select>
                                         {errors.plant_id && <div className="text-errorRed text-sm">{errors.plant_id}</div>}
-                                    </div>
+                                    </div> */}
                                     <div className="mb-4">
                                         <label className="block text-gray-700">Status*</label>
                                         <select

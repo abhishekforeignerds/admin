@@ -39,8 +39,8 @@ export default function View({ finishedGoods, statusCounts }) {
     };
 
     // Debug: Log user information
-    console.log("User roles:", userRoles);
-    console.log("User Plant ID:", userPlantId);
+    // console.log("User roles:", userRoles);
+    // console.log("User Plant ID:", userPlantId);
 
     let filteredMaterials = [];
 
@@ -49,13 +49,13 @@ export default function View({ finishedGoods, statusCounts }) {
         filteredMaterials = finishedGoods.filter((item) => {
             // Convert both to numbers before comparing.
             const plantMatch = Number(item.plant_id) === Number(userPlantId);
-            console.log(
-                `Checking item ${item.id} with plant_id ${item.plant_id} (type: ${typeof item.plant_id}) against userPlantId ${userPlantId} (type: ${typeof userPlantId}):`,
-                plantMatch
-            );
+            // console.log(
+            //     `Checking item ${item.id} with plant_id ${item.plant_id} (type: ${typeof item.plant_id}) against userPlantId ${userPlantId} (type: ${typeof userPlantId}):`,
+            //     plantMatch
+            // );
             return plantMatch;
         });
-        console.log("Non–Super Admin filtered materials:", filteredMaterials);
+        // console.log("Non–Super Admin filtered materials:", filteredMaterials);
     } else {
         // For Super Admin, apply search and date filters and ensure status is not "deleted".
         filteredMaterials = finishedGoods.filter((item) => {
@@ -64,13 +64,13 @@ export default function View({ finishedGoods, statusCounts }) {
                 item.item_code.toLowerCase().includes(search.toLowerCase());
             const matchesDate = filterByDate(item.created_at, selectedFilter);
             const includeItem = matchesSearch && matchesDate && item.status !== "deleted";
-            console.log(
-                `Super Admin - Checking item ${item.id}: search(${matchesSearch}), date(${matchesDate}), status(${item.status}) -> Include:`,
-                includeItem
-            );
+            // console.log(
+            // `Super Admin - Checking item ${item.id}: search(${matchesSearch}), date(${matchesDate}), status(${item.status}) -> Include:`,
+            //     includeItem
+            // );
             return includeItem;
         });
-        console.log("Super Admin filtered materials:", filteredMaterials);
+        // console.log("Super Admin filtered materials:", filteredMaterials);
     }
 
     // Calculate counts for the cards.

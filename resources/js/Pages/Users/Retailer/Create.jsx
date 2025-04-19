@@ -1,37 +1,46 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, useForm, usePage } from '@inertiajs/react'
 import { Link } from '@inertiajs/react'
-import React, { useState } from 'react';
 import { FiChevronRight } from 'react-icons/fi'
 
 export default function Create({ message, roles, plants, subAdmins, stockitUsers }) {
+    const { auth } = usePage().props;
+    const userRoles = auth?.user?.roles || [];
+    const isStockit = userRoles.includes('Stockit');
+
+    // Find the stockitUsers record for the logged‑in user
+    const currentStockit = isStockit
+        ? stockitUsers.find(u => u.id === auth.user.id)
+        : null;
+
+    // If we found it, grab its sub_admin_id
+    const initialSubAdminId = currentStockit ? currentStockit.sub_admin_id : '';
+
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         email: '',
         password: '',
         status: '',
         mobile_number: '',
-        role: '',
+        role: 'Retailer',
         plant_id: '',
         pan_card: '',
         gstin_number: '',
-        sub_admin_id: '',
-        stockit_id: '',
-    })
+        // default in the sub_admin_id we found (or blank)
+        sub_admin_id: initialSubAdminId,
+        // and stockit_id set to the user’s own ID if they’re Stockit
+        stockit_id: isStockit ? auth.user.id : '',
+    });
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        post(route('users.store'))
+        post(route('retailer.store'))
     }
 
+    const filteredRoles = roles.filter(
+        (role) => !['Super Admin', 'Stockit', 'Super Admin'].includes(role.name)
+    );
 
-    const { auth } = usePage().props; // Get user data from Inertia
-    const userRoles = auth?.user?.roles || [];
-    const [activeTab, setActiveTab] = useState("All");
-    const userPermissions =
-        auth?.user?.rolespermissions?.flatMap((role) => role.permissions) || [];
-
-    const filteredRoles = roles.filter((role) => role.name !== 'Super Admin')
 
     return (
         <AuthenticatedLayout
@@ -74,22 +83,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                                         />
                                         {errors.name && <div className="text-errorRed text-sm">{errors.name}</div>}
                                     </div>
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700">Assign Role*</label>
-                                        <select
-                                            value={data.role}
-                                            onChange={(e) => setData('role', e.target.value)}
-                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                        >
-                                            <option value="">Select Role*</option>
-                                            {filteredRoles.map((role) => (
-                                                <option key={role.id} value={role.name}>
-                                                    {role.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {errors.role && <div className="text-errorRed text-sm">{errors.role}</div>}
-                                    </div>
+
                                     {data.role === 'Stockit' && (
                                         <div className="mb-4">
                                             <label className="block text-gray-700">Select Super Admin*</label>
@@ -108,41 +102,28 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                                             {errors.sub_admin_id && <div className="text-errorRed text-sm">{errors.sub_admin_id}</div>}
                                         </div>
                                     )}
-                                    {data.role === 'Retailer' && (
-                                        <div className="mb-4">
-                                            <label className="block text-gray-700">Select Stockit User*</label>
-                                            <select
-                                                value={data.stockit_id}
-                                                onChange={(e) => setData('stockit_id', e.target.value)}
-                                                className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            >
-                                                <option value="">Select Stockit User</option>
-                                                {stockitUsers.map((user) => (
-                                                    <option key={user.id} value={user.id}>
-                                                        {user.name}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            {errors.stockit_id && <div className="text-errorRed text-sm">{errors.stockit_id}</div>}
-                                        </div>
-                                    )}
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700">Assign Plant</label>
-                                        <select
-                                            value={data.plant_id}
-                                            onChange={(e) => setData('plant_id', e.target.value)}
-                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                        >
-                                            <option value="">Select Plant</option>
-                                            {plants.map((plant) => (
-                                                <option key={plant.id} value={plant.id}>
-                                                    {plant.plant_name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {errors.plant_id && <div className="text-errorRed text-sm">{errors.plant_id}</div>}
-                                    </div>
-                                    <div className="mb-4">
+                                    {
+                                        userRoles[0] != 'Stockit' && (
+                                            <div className="mb-4">
+                                                <label className="block text-gray-700">Select Stockit User*</label>
+                                                <select
+                                                    value={data.stockit_id}
+                                                    onChange={(e) => setData('stockit_id', e.target.value)}
+                                                    className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
+                                                >
+                                                    <option value="">Select Stockit User</option>
+                                                    {stockitUsers.map((user) => (
+                                                        <option key={user.id} value={user.id}>
+                                                            {user.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                {errors.stockit_id && <div className="text-errorRed text-sm">{errors.stockit_id}</div>}
+                                            </div>
+                                        )
+                                    }
+
+                                    < div className="mb-4">
                                         <label className="block text-gray-700">Status*</label>
                                         <select
                                             value={data.status}
@@ -225,7 +206,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                         </div>
                     </div>
                 </div>
-            </div>
-        </AuthenticatedLayout>
+            </div >
+        </AuthenticatedLayout >
     )
 }

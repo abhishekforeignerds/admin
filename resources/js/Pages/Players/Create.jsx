@@ -1,9 +1,16 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
+import React, { useState } from 'react';
 import { Link } from '@inertiajs/react';
 import { FiChevronRight } from 'react-icons/fi';
 
-export default function Create() {
+export default function Create(retailerUsers) {
+    // console.log('retailerUsers', retailerUsers.retailerUsers)
+    const { auth } = usePage().props; // Get user data from Inertia
+    const userRoles = auth?.user?.roles || [];
+    const [activeTab, setActiveTab] = useState("All");
+    const userPermissions =
+        auth?.user?.rolespermissions?.flatMap((role) => role.permissions) || [];
     const { data, setData, post, processing, errors } = useForm({
         first_name: '',
         last_name: '',
@@ -12,10 +19,12 @@ export default function Create() {
         email: '',
         username: '',
         password: '',
-        points: '',
+        points: '0',
+        retailer_id: userRoles[0] === 'Retailer' ? auth.user.id : '',
         winning_percentage: 70,
         override_chance: 0.3,
     });
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -26,11 +35,11 @@ export default function Create() {
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Create Client
+                    Add Player
                 </h2>
             }
         >
-            <Head title="Create Client" />
+            <Head title="Add Player" />
 
             <div className="main-content-container sm:ml-52">
                 <div className="mx-auto py-6 flex justify-between flex-col md:flex-row gap-2">
@@ -39,7 +48,7 @@ export default function Create() {
                         <FiChevronRight size={24} color="black" />
                         <Link href={route('players.index')}> Clients Management</Link>
                         <FiChevronRight size={24} color="black" />
-                        <span className="text-red">Create Client</span>
+                        <span className="text-red">Add Player</span>
                     </p>
                     <Link
                         href={route('players.index')}
@@ -53,7 +62,7 @@ export default function Create() {
                     <div className="bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 min-h-[80vh]">
                             <div className="top-search-bar-box flex py-4">
-                                <h2 className="font-semibold text-3xl mb-6">Create Client</h2>
+                                <h2 className="font-semibold text-3xl mb-6">Add Player</h2>
                             </div>
                             <form onSubmit={handleSubmit} className="styled-form">
                                 <div className="theme-style-form grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -81,6 +90,28 @@ export default function Create() {
                                         />
                                         {errors.last_name && <div className="text-red-600">{errors.last_name}</div>}
                                     </div>
+                                    {
+                                        userRoles[0] != 'Retailer' && (
+
+                                            <div className="mb-4">
+                                                <label className="block text-gray-700">Select Stockit User*</label>
+                                                <select
+                                                    value={data.retailer_id}
+                                                    onChange={(e) => setData('retailer_id', e.target.value)}
+                                                    className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
+                                                >
+                                                    <option value="">Select Stockit User</option>
+                                                    {retailerUsers.retailerUsers.map((user) => (
+                                                        <option key={user.id} value={user.id}>
+                                                            {user.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                {errors.retailer_id && <div className="text-errorRed text-sm">{errors.retailer_id}</div>}
+                                            </div>
+
+                                        )
+                                    }
                                     {/* Country */}
                                     <div className="mb-4">
                                         <label className="block text-gray-700">Country*</label>
@@ -142,7 +173,7 @@ export default function Create() {
                                         {errors.password && <div className="text-red-600">{errors.password}</div>}
                                     </div>
                                     {/* Points */}
-                                    <div className="mb-4">
+                                    {/* <div className="mb-4">
                                         <label className="block text-gray-700">Points*</label>
                                         <input
                                             type="number"
@@ -152,7 +183,7 @@ export default function Create() {
                                             placeholder="Enter Points"
                                         />
                                         {errors.points && <div className="text-red-600">{errors.points}</div>}
-                                    </div>
+                                    </div> */}
                                     {/* Winning Percentage */}
                                     {userPermissions.includes("winningpercentage players") && (
                                         <div className="mb-4">
@@ -191,7 +222,7 @@ export default function Create() {
                                         disabled={processing}
                                         className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-red-800"
                                     >
-                                        Create Client
+                                        Add Player
                                     </button>
                                 </div>
                             </form>

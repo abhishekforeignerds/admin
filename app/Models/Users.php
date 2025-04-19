@@ -33,6 +33,9 @@ class Users extends Authenticatable
         'points',
         'winning_percentage',
         'override_chance',
+        'stockit_id',
+        'sub_admin_id',
+        'retailer_id',
     ];
 
 

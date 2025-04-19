@@ -36,6 +36,9 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\User\SubadminController;
+use App\Http\Controllers\User\StockitController;
+use App\Http\Controllers\User\RetailerController;
 
 // Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'dynamic.permission'])->group(function () {
@@ -45,6 +48,30 @@ Route::middleware(['auth', 'dynamic.permission'])->group(function () {
     Route::get('users/{id}/suspend', [UserController::class, 'suspend'])->name('users.suspend');
     Route::get('users/{id}/addfund', [UserController::class, 'addfund'])->name('users.addfund');
     Route::put('users/{id}/storefund', [UserController::class, 'storefund'])->name('users.storefund');
+});
+// Route::middleware(['auth', 'dynamic.permission'])->group(function () {
+//     Route::resource('subadmin', SubadminController::class);
+
+//     Route::get('subadmin/{id}/view', [SubadminController::class, 'view'])->name('subadmin.view');
+//     Route::get('subadmin/{id}/suspend', [SubadminController::class, 'suspend'])->name('subadmin.suspend');
+//     Route::get('subadmin/{id}/addfund', [SubadminController::class, 'addfund'])->name('subadmin.addfund');
+//     Route::put('subadmin/{id}/storefund', [SubadminController::class, 'storefund'])->name('subadmin.storefund');
+// });
+Route::middleware(['auth', 'dynamic.permission'])->group(function () {
+    Route::resource('stockit', StockitController::class);
+
+    Route::get('stockit/{id}/view', [StockitController::class, 'view'])->name('stockit.view');
+    Route::get('stockit/{id}/suspend', [StockitController::class, 'suspend'])->name('stockit.suspend');
+    Route::get('stockit/{id}/addfund', [StockitController::class, 'addfund'])->name('stockit.addfund');
+    Route::put('stockit/{id}/storefund', [StockitController::class, 'storefund'])->name('stockit.storefund');
+});
+Route::middleware(['auth', 'dynamic.permission'])->group(function () {
+    Route::resource('retailer', RetailerController::class);
+
+    Route::get('retailer/{id}/view', [RetailerController::class, 'view'])->name('retailer.view');
+    Route::get('retailer/{id}/suspend', [RetailerController::class, 'suspend'])->name('retailer.suspend');
+    Route::get('retailer/{id}/addfund', [RetailerController::class, 'addfund'])->name('retailer.addfund');
+    Route::put('retailer/{id}/storefund', [RetailerController::class, 'storefund'])->name('retailer.storefund');
 });
 
 use App\Http\Controllers\InventoryController;

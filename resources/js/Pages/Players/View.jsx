@@ -12,7 +12,7 @@ import { getStatusText, getStatusClass } from '../../../utils/statusUtils';
 import { filterOptions, filterByDate } from '@/Components/FilterUtils';
 import Pagination from '@/Components/Pagination';
 
-export default function View({ users }) {
+export default function View({ users, allusers }) {
     const [search, setSearch] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState(search);
     const { flash = {} } = usePage().props;
@@ -108,6 +108,22 @@ export default function View({ users }) {
                                 Create Client
                             </Link>
                         )}
+                        <div className="flex my-6 flex-col gap-6 md:flex-row">
+
+                            <ItemInfoRedCard svgIcon={clientUserIcon} cardHeading='All Players' description={allusers} />
+
+
+
+
+
+
+                        </div>
+                        <Link
+                            className="text-right bg-red px-8 py-2 rounded-md text-white block max-w-max ml-auto mb-4"
+                            href={route('players.create')}
+                        >
+                            Add Player
+                        </Link>
                     </div>
                     {/* Flash Message - visible for a few seconds */}
                     {showFlash && flash.success && (

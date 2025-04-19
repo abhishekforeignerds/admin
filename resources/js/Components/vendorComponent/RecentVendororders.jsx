@@ -57,7 +57,7 @@ const RecentVendororders = ({ vendorpurchaseOrders }) => {
                         selectedOrders.map((order) => (
 
                             < tr key={order.id} className="hover:bg-gray-50 text-sm" >
-                                {console.log(order)}
+
                                 <td className="p-2 border-b">{order.id}</td>
                                 <td className="p-2 border-b">{order.po_date}</td>
                                 <td className="p-2 border-b">

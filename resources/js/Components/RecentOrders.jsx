@@ -7,7 +7,7 @@ import { filterByDate, filterOptions } from '@/Components/FilterUtils';
 
 const RecentGameResults = ({ gameResults }) => {
   // Poll for gameResults update every 20 seconds.
-  console.log(gameResults)
+
 
   const gameIds = Object.keys(gameResults);
   // Initialize with the first game ID, if available.

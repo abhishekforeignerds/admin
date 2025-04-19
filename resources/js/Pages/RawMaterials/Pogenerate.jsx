@@ -72,7 +72,7 @@ function SearchableSelect({ options, value, onChange, className, placeholder = "
 }
 
 export default function Create({ clients, plants, finishedGoods, materials = [] }) {
-    console.log(materials)
+    // console.log(materials)
     // Initialize ordered_items based on the passed materials (which now include hsn_sac_code and material_name)
     const initialOrderedItems = materials.length > 0
         ? materials.map(mat => ({

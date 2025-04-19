@@ -145,7 +145,7 @@ export default function Edit({ client }) {
                                     <div className="mb-4">
                                         <label className="block text-gray-700">Points*</label>
                                         <input
-                                            type="number"
+                                            type="number" readOnly
                                             value={data.points}
                                             onChange={(e) => setData('points', e.target.value)}
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm"

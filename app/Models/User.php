@@ -22,7 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'raw_materials',
-        'password','mobile_number', 'status','plant_assigned','updated_at','effective_date','company_name','gstin_number','pan_card','state_code','company_address'
+        'password','mobile_number', 'status','plant_assigned','updated_at','effective_date','company_name','gstin_number','pan_card','state_code','company_address','sub_admin_id','retailer_id','stockit_id'
     ];
 
     /**

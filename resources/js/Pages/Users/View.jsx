@@ -32,10 +32,9 @@ export default function View({ users, statusCounts }) {
     });
 
     // 2️⃣ Define display order and permission keys
-    const rolesOrder = ['Super Admin', 'Sub Admin', 'Stockit', 'Retailer'];
+    const rolesOrder = ['Super Admin', 'Stockit', 'Retailer'];
     const rolePermissionsMap = {
         'Super Admin': 'superadmin-table users',
-        'Sub Admin': 'subadmin-table users',
         'Stockit': 'stockit-table users',
         'Retailer': 'retailer-table users',
     };

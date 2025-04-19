@@ -19,8 +19,9 @@ class ClientController extends Controller
     {
     
         $users = Users::all();
+        $allusers = Users::count();;
 
-        return Inertia::render('Players/View', ['users' => $users,
+        return Inertia::render('Players/View', ['users' => $users, 'allusers' => $allusers,
         ]);
     }
 
@@ -28,7 +29,7 @@ class ClientController extends Controller
     {
         $roles = Role::all();
         $plants =  Plant::where('status', 'active')->get();
-        return Inertia::render('Players/Create', ['roles' => $roles, 'plants' => $plants]);
+        return Inertia::render('Players/Create', ['roles' => $roles, 'plants' => $plants, 'retailerUsers'  => User::role('Retailer')->get(['id','name']),]);
     }
 
     public function store(Request $request)
@@ -52,10 +53,14 @@ class ClientController extends Controller
             Rule::unique('user', 'username'),
         ],
         'password'            => 'required|string|min:8',
-        'points'              => 'required|integer|min:0',
+        'points'              => 'nullable|integer|min:0',
         'winning_percentage'  => 'required|numeric|min:0|max:100',
         'override_chance'     => 'required|numeric|min:0|max:100',
+        'retailer_id'            => 'required',
     ]);
+    $stockit = User::findOrFail($validated['retailer_id']);
+    $admin = User::findOrFail($stockit->stockit_id);
+ 
 
     $user = Users::create([
         'first_name'          => $request->first_name,
@@ -68,10 +73,20 @@ class ClientController extends Controller
         'points'              => $request->points,
         'winning_percentage'  => $request->winning_percentage,
         'override_chance'     => $request->override_chance,
+        'retailer_id'         => $request->retailer_id,
+        'stockit_id'          => $stockit->stockit_id,
+        'sub_admin_id'        => $admin->sub_admin_id,
     ]);
 
-    // Optionally, if you no longer assign a role, remove this line.
-    // $user->assignRole($request->role);
+    $sub = User::findOrFail($validated['retailer_id']);
+    if ($sub->pan_card < $validated['points']) {
+        throw new \Exception('Low Balance');
+    }
+    $user->update([
+        'points' => $request->points,
+    ]);
+    $sub->decrement('pan_card', $validated['points']);
+
 
     Notification::create([
         'from_id'           => auth()->id(),
@@ -83,7 +98,7 @@ class ClientController extends Controller
         'notification_url'  => 'clients',
     ]);
 
-    return redirect()->route('players.index')->with('success', 'Client created successfully.');
+    return redirect()->route('players.index')->with('success', 'Player Added successfully.');
 }
 
     public function edit($id)
@@ -121,9 +136,15 @@ class ClientController extends Controller
             'reference_number' => $request->reference_number,
         ]);
         $user = Users::findOrFail($id);
+        $sub = User::findOrFail($user->stockit_id);
+        if ($sub->pan_card < $user->points) {
+            throw new \Exception('Low Balance');
+        }
         $user->update([
             'points' => $user->points + $request->amount,
         ]);
+
+        $sub->decrement('pan_card', $validated['points']);
        // Redirect to a valid Inertia route with a flash message.
        return redirect()->route('players.index')
        ->with('success', 'Fund entry created successfully.');

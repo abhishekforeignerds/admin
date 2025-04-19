@@ -204,20 +204,34 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
                 },
             ];
         }
-        else if (currentPath.startsWith('/users') || currentPath.startsWith("/roles") || currentPath.startsWith("/permissions")) {
+        // inside your menu–building function/component:
+        const allUserLinks = [
+            { name: "User List", icon: <UsersIcon className="w-6 h-6" />, link: "/users", permission: "view users" },
+            { name: "Stockit List", icon: <UsersIcon className="w-6 h-6" />, link: "/stockit", permission: "view stockit" },
+            { name: "Retailer List", icon: <UsersIcon className="w-6 h-6" />, link: "/retailer", permission: "view retailer" },
+            { name: "Add New Users", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/users/create", permission: "create users" },
+            { name: "Roles List", icon: <UsersIcon className="w-6 h-6" />, link: "/roles", permission: "view users" },
+            { name: "Permissions List", icon: <UsersIcon className="w-6 h-6" />, link: "/permissions", permission: "view users" },
+        ];
+
+        if (
+            currentPath.startsWith("/users") ||
+            currentPath.startsWith("/roles") ||
+            currentPath.startsWith("/permissions") ||
+            currentPath.startsWith("/stockit") ||
+            currentPath.startsWith("/retailer") ||
+            currentPath.startsWith("/subadmin")
+        ) {
             return [
                 {
                     title: "USER MANAGEMENT",
-                    links: [
-                        { name: "User List", icon: <UsersIcon className="w-6 h-6" />, link: "/users" },
-                        { name: "Add New Users", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/users/create" },
-                        { name: "Roles List", icon: <UsersIcon className="w-6 h-6" />, link: "/roles" },
-                        { name: "Permissions List", icon: <UsersIcon className="w-6 h-6" />, link: "/permissions" },
-
-                    ],
-                },
+                    links: allUserLinks.filter(link =>
+                        userPermissions.includes(link.permission)
+                    )
+                }
             ];
-        } else if (
+        }
+        else if (
             currentPath.startsWith('/inventory') ||
             currentPath.startsWith('/games') ||
             currentPath.startsWith('/raw-materials')

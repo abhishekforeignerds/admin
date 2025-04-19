@@ -32,7 +32,7 @@ export default function Dashboard({ gameResults, vendorpurchaseOrders, statusCou
             // Check if the link ref exists and trigger a click
             if (dashboardLinkRef.current) {
                 dashboardLinkRef.current.click();
-                console.log('Dashboard link was clicked.');
+
             }
         }, 120000);
 

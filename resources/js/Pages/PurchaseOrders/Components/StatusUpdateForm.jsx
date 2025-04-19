@@ -24,8 +24,8 @@ const StatusUpdateForm = ({
             orderStatus !== 'dispatched' &&
             orderStatus !== 'add_rm') ||
         (insufficientMaterials.length > 0 && orderStatus !== 'add_rm');
-    console.log('shouldRenderForm')
-    console.log(shouldRenderForm)
+    // console.log('shouldRenderForm')
+    // console.log(shouldRenderForm)
     if (!shouldRenderForm) {
         return null;
     }

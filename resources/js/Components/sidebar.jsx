@@ -17,7 +17,7 @@ import { MdStore } from "react-icons/md";
 const Sidebar = () => {
   const currentRoute = route()?.current() || "";
   // Default to an empty string
-  console.log(currentRoute)
+
   const { auth } = usePage().props; // Get user data from Inertia
   const userRoles = auth?.user?.roles || []; // Get roles or default to an empty array
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -30,7 +30,9 @@ const Sidebar = () => {
       : "bg-white color-secondary hover:bg-primary hover:text-white"
       }`;
   };
+  const isSuperAdmin = userRoles[0] == 'Super Admin' ? true : false;
 
+  // …
   return (
     <>
       {/* Mobile Toggle Button - Visible only on small screens */}
@@ -122,6 +124,22 @@ const Sidebar = () => {
                 </a>
               </Link>
               <span className="tooltip">User Management</span>
+            </div>
+          )}
+
+
+
+          {!isSuperAdmin && userPermissions.includes('view retailer') && (
+            <div className="relative group">
+              <Link
+                href="/retailer"
+                className={getSidebarLinkClass(
+                  currentRoute?.startsWith("retailer")
+                )}
+              >
+                <LiaUsersCogSolid className="text-xl" />
+                <span className="tooltip">Retailers Management</span>
+              </Link>
             </div>
           )}
 

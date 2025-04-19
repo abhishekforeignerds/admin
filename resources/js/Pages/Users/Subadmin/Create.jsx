@@ -1,7 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { Head, useForm, usePage } from '@inertiajs/react'
+import { Head, useForm } from '@inertiajs/react'
 import { Link } from '@inertiajs/react'
-import React, { useState } from 'react';
 import { FiChevronRight } from 'react-icons/fi'
 
 export default function Create({ message, roles, plants, subAdmins, stockitUsers }) {
@@ -11,7 +10,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
         password: '',
         status: '',
         mobile_number: '',
-        role: '',
+        role: 'Super Admin',
         plant_id: '',
         pan_card: '',
         gstin_number: '',
@@ -21,17 +20,12 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        post(route('users.store'))
+        post(route('subadmin.store'))
     }
 
-
-    const { auth } = usePage().props; // Get user data from Inertia
-    const userRoles = auth?.user?.roles || [];
-    const [activeTab, setActiveTab] = useState("All");
-    const userPermissions =
-        auth?.user?.rolespermissions?.flatMap((role) => role.permissions) || [];
-
-    const filteredRoles = roles.filter((role) => role.name !== 'Super Admin')
+    const filteredRoles = roles.filter(
+        (role) => !['Super Admin', 'Stockit', 'Retailer'].includes(role.name)
+    );
 
     return (
         <AuthenticatedLayout
@@ -47,11 +41,11 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                     <p className="flex">
                         <Link href={route('dashboard')}>Dashboard</Link>
                         <FiChevronRight size={24} color="black" />
-                        <Link href={route('users.index')}>Users Management</Link>
+                        <Link href={route('subadmin.index')}>Users Management</Link>
                         <FiChevronRight size={24} color="black" />
                         <span className="text-red">Create User</span>
                     </p>
-                    <Link href={route('users.index')} className="border border-red py-1 px-14 text-red rounded max-w-max">
+                    <Link href={route('subadmin.index')} className="border border-red py-1 px-14 text-red rounded max-w-max">
                         Back
                     </Link>
                 </div>
@@ -117,7 +111,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                                                 className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
                                             >
                                                 <option value="">Select Stockit User</option>
-                                                {stockitUsers.map((user) => (
+                                                {stockitsubadmin.map((user) => (
                                                     <option key={user.id} value={user.id}>
                                                         {user.name}
                                                     </option>
@@ -126,22 +120,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                                             {errors.stockit_id && <div className="text-errorRed text-sm">{errors.stockit_id}</div>}
                                         </div>
                                     )}
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700">Assign Plant</label>
-                                        <select
-                                            value={data.plant_id}
-                                            onChange={(e) => setData('plant_id', e.target.value)}
-                                            className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                        >
-                                            <option value="">Select Plant</option>
-                                            {plants.map((plant) => (
-                                                <option key={plant.id} value={plant.id}>
-                                                    {plant.plant_name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {errors.plant_id && <div className="text-errorRed text-sm">{errors.plant_id}</div>}
-                                    </div>
+
                                     <div className="mb-4">
                                         <label className="block text-gray-700">Status*</label>
                                         <select
