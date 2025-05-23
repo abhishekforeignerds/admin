@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { useForm } from '@inertiajs/react';
+import imgk from "../../../assets/goldens-k.png";
+import imgq from "../../../assets/golden-q.png";
+import imgj from "../../../assets/golden-j.png";
 
 export default function Ticket({ user }) {
     const coins = [5, 10, 20, 50, 100, 200, 500];
@@ -118,9 +121,9 @@ export default function Ticket({ user }) {
                     ))}
 
                     {[
-                        { label: '/assets-normal/img/k-removebg-preview.png', codes: ['KS', 'KD', 'KC', 'KH'], baseIdx: 17 },
-                        { label: '/assets-normal/img/q.png', codes: ['QS', 'QD', 'QC', 'QH'], baseIdx: 21 },
-                        { label: '/assets-normal/img/j-removebg-preview.png', codes: ['JS', 'JD', 'JC', 'JH'], baseIdx: 25 },
+                        { label: imgk, codes: ['KS', 'KD', 'KC', 'KH'], baseIdx: 17 },
+                        { label: imgq, codes: ['QS', 'QD', 'QC', 'QH'], baseIdx: 21 },
+                        { label: imgj, codes: ['JS', 'JD', 'JC', 'JH'], baseIdx: 25 },
                     ].map(({ label, codes, baseIdx }, row) => (
                         <React.Fragment key={row}>
                             <div className="flex items-center justify-center p-2" data-index={baseIdx}>

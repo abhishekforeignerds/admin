@@ -6,7 +6,7 @@ import { filterOptions, filterByDate } from "@/Components/FilterUtils";
 const OutgoingPOTable = ({ orders }) => {
     const plantIds = Object.keys(orders);
     const [selectedPlant, setSelectedPlant] = useState(plantIds.length ? plantIds[0] : null);
-    const [selectedFilter, setSelectedFilter] = useState("all");
+    const [selectedFilter, setSelectedFilter] = useState("today");
 
     // Filter orders based on selected date filter
     const selectedOrders = useMemo(() => {

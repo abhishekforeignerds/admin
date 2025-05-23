@@ -28,6 +28,7 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
     // Flatten all links from all sections into one array.
 
     const userRoles = auth?.user?.roles || [];
+    const balance = auth?.user?.balance;
     const userPermissions = auth.user.rolespermissions.flatMap(role => role.permissions);
 
     const quickLinkSections = (() => {
@@ -40,7 +41,8 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
                     // No title provided; the header won’t show.
                     links: [
 
-                        { name: "Users List", icon: <UsersIcon className="w-6 h-6" />, link: "/players" },
+                        { name: "Users List", icon: <UsersIcon className="w-6 h-6" />, link: "/users" },
+                        { name: "Players List", icon: <UsersIcon className="w-6 h-6" />, link: "/players" },
                         { name: "Games List", icon: <BiCartAdd className="w-6 h-6" />, link: "/games/" },
 
                     ],
@@ -48,14 +50,37 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
             ];
         } else if (
             currentPath.startsWith('/dashboard') &&
-            userRoles[0] === 'Client'
+            userRoles[0] === 'Retailer'
+        ) {
+            return [
+                {
+                    // No title provided; the header won’t show.
+                    links: [
+
+                        { name: "Turnover Report", icon: <UsersIcon className="w-6 h-6" />, link: "/turnover-history" },
+                        { name: "Games Results", icon: <BiCartAdd className="w-6 h-6" />, link: "/player-game-results" },
+                        { name: "Players List", icon: <UsersIcon className="w-6 h-6" />, link: "/players" },
+
+                    ],
+                },
+            ];
+        } else if (
+            currentPath.startsWith('/players')
+            || currentPath.startsWith('/player-game-results')
+            || currentPath.startsWith('/turnover-history')
+            || currentPath.startsWith('/player-history')
+            || currentPath.startsWith('/transaction-history')
+            || currentPath.startsWith('/results-history')
         ) {
             return [
                 {
                     links: [
-                        { name: "Send New Po", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/client-purchase-orders/create" },
-                        { name: "Check PO List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/client-purchase-orders" },
-                        { name: "View Invoices", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/po-invoices" },
+                        { name: "Players List", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/players" },
+                        { name: "Game Results", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/player-game-results" },
+                        { name: "Turnover report", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/turnover-history" },
+                        { name: "Player History", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/player-history" },
+                        { name: "Transaction History", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/transaction-history" },
+                        // { name: "Results History", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/results-history" },
                     ],
                 },
             ];
@@ -209,7 +234,7 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
             { name: "User List", icon: <UsersIcon className="w-6 h-6" />, link: "/users", permission: "view users" },
             { name: "Stockit List", icon: <UsersIcon className="w-6 h-6" />, link: "/stockit", permission: "view stockit" },
             { name: "Retailer List", icon: <UsersIcon className="w-6 h-6" />, link: "/retailer", permission: "view retailer" },
-            { name: "Add New Users", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/users/create", permission: "create users" },
+            // { name: "Add New Users", icon: <ClipboardDocumentListIcon className="w-6 h-6" />, link: "/users/create", permission: "create users" },
             { name: "Roles List", icon: <UsersIcon className="w-6 h-6" />, link: "/roles", permission: "view users" },
             { name: "Permissions List", icon: <UsersIcon className="w-6 h-6" />, link: "/permissions", permission: "view users" },
         ];
@@ -399,6 +424,25 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
 
             ];
         }
+        const allReportsLinks = [
+            // { name: "Admin Report", icon: <UsersIcon className="w-6 h-6" />, link: "/report/admin-report", permission: "admin report" },
+            { name: "Retailer Report", icon: <UsersIcon className="w-6 h-6" />, link: "/report/retailer-report", permission: "retailer report" },
+            { name: "Stockit Report", icon: <UsersIcon className="w-6 h-6" />, link: "/report/stockit-report", permission: "stockit report" },
+
+        ];
+
+        if (
+            currentPath.startsWith("/report")
+        ) {
+            return [
+                {
+                    title: "USER MANAGEMENT",
+                    links: allReportsLinks.filter(link =>
+                        userPermissions.includes(link.permission)
+                    )
+                }
+            ];
+        }
         else if (
             (currentPath.startsWith('/players') || currentPath.startsWith('/vendors')) &&
             userRoles[0] === 'Plant Head'
@@ -497,7 +541,7 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
             <Sidebar />
             <div className="dashboard-content-container pl-16 max-md:pl-0">
                 <header className='relative z-10'>
-                    <nav className=" logo-topbar border-b border-gray-100 bg-white" style={{ backgroundColor: ' rgb(0 0 0 / 9%)' }}>
+                    <nav className=" logo-topbar border-b border-gray-100 bg-gray-300" style={{ backgroundColor: ' rgb(214 214 214);' }}>
                         <div className="mr-8 ml-12 max-w-7xl px-4 sm:px-6 lg:px-6 lg:mx-0">
                             <div className="flex h-16 justify-between">
                                 <div className="flex">
@@ -519,8 +563,7 @@ export default function AuthenticatedLayout({ header, children, statusCounts = {
                                 </div>
 
                                 <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                                    <div className='font-bold'>    <Link
-                                        href={route('daily-mrp.update')} >{reportMRPIcon}</Link></div>
+                                    <div className='font-bold'>  Balance : {balance || 0}</div>
                                     <div className='sm:ms-6 sm:flex sm:items-center gap-10'>
                                         <Link
                                             href={route('notifications')}   // Use the correct path to navigate to the users page

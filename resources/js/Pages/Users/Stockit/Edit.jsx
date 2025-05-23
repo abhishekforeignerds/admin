@@ -9,7 +9,7 @@ export default function Edit({ user, roles, plants }) {
         email: user.email,
         status: user.status,
         mobile_number: user.mobile_number,
-        gstin_number: user.gstin_number,
+        commission_percentage: user.commission_percentage,
         password: '',
         role: user.roles && user.roles.length > 0 ? user.roles[0].name : '',
         plant_assigned: user.plant ? user.plant.id : '',
@@ -102,7 +102,7 @@ export default function Edit({ user, roles, plants }) {
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
                                         >
                                             <option value="">Select Status</option>
-                                            <option value="pending_approval">Pending</option>
+                                            {/* <option value="pending_approval">Pending</option> */}
                                             <option value="active">Active</option>
                                             <option value="inactive">Inactive</option>
                                         </select>
@@ -141,12 +141,15 @@ export default function Edit({ user, roles, plants }) {
                                     <div className="mb-4">
                                         <label className="block text-gray-700">Commission Percentage</label>
                                         <input
-                                            type="text"
-                                            value={data.gstin_number}
-                                            onChange={(e) => setData('gstin_number', e.target.value)}
+                                            type="number"
+                                            value={data.commission_percentage}
+                                            min="0"
+                                            max="10"
+                                            onChange={(e) => setData('commission_percentage', e.target.value)}
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
-                                            required />
-                                        {errors.gstin_number && <div className="text-errorRed text-sm">{errors.gstin_number}</div>}
+                                            required
+                                        />
+                                        {errors.commission_percentage && <div className="text-errorRed text-sm">{errors.commission_percentage}</div>}
                                     </div>
 
 

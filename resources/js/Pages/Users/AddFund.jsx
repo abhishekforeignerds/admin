@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { FiChevronRight } from 'react-icons/fi';
 
 export default function StoreFund({ client }) {
@@ -17,7 +17,10 @@ export default function StoreFund({ client }) {
         // Post the form data to your defined route (adjust the route name as needed)
         put(route('users.storefund', client.id));
     };
-
+    const { flash = {}, auth } = usePage().props;
+    const userPermissions = auth.user.rolespermissions.flatMap(r => r.permissions);
+    const balance = auth.user.balance;
+    console.log(auth.user)
     return (
         <AuthenticatedLayout
             header={
@@ -51,7 +54,18 @@ export default function StoreFund({ client }) {
                                 <h2 className="font-semibold text-3xl mb-6">Add Fund</h2>
                             </div>
                             <div className="top-search-bar-box flex py-4">
-                                <h2 className="font-semibold text-3xl mb-6">Current balance : {client.pan_card}</h2>
+
+                                <h2 className="font-semibold text-3xl mb-6">Your balance :{(Number(balance) || 0).toLocaleString('en-IN')}</h2>
+
+
+
+
+                            </div>
+                            <div className="top-search-bar-box flex py-4">
+                                <h2 className="font-semibold text-3xl mb-6">User balance :{(Number(client.pan_card) || 0).toLocaleString('en-IN')} </h2>
+
+
+
                             </div>
                             <form onSubmit={handleSubmit} className="styled-form">
                                 <div className="theme-style-form grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

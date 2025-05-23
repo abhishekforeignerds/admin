@@ -143,6 +143,7 @@ const Sidebar = () => {
             </div>
           )}
 
+
           {/* Cart Link */}
           {(
             userPermissions.includes("view client-purchase-orders")
@@ -162,7 +163,7 @@ const Sidebar = () => {
 
           {/* Inventory & Stock Link */}
           {(
-            userPermissions.includes("view finished-goods")
+            userPermissions.includes("view games")
           ) && (
               <div className="relative group">
                 <Link href={route("games.index")}>
@@ -201,16 +202,18 @@ const Sidebar = () => {
           {/* Reports Analytics Link */}
 
 
-          {(hasInventoryPermission || hasPOPermission) && (
-            <div className="relative group">
-              <Link href={hasInventoryPermission ? route("reports.inventory-index") : route("reports.po-index")}>
-                <a className={getSidebarLinkClass(currentRoute.startsWith("reports"))}>
-                  <AiOutlineFileDone className="text-xl" />
-                </a>
-              </Link>
-              <span className="tooltip">Reports Analytics</span>
-            </div>
-          )}
+          {(
+            userPermissions.includes("admin report")
+          ) && (
+              <div className="relative group">
+                <Link href={route("report.retilaer")}>
+                  <a className={getSidebarLinkClass(currentRoute.startsWith("reports"))}>
+                    <AiOutlineFileDone className="text-xl" />
+                  </a>
+                </Link>
+                <span className="tooltip">Reports Analytics</span>
+              </div>
+            )}
 
         </nav>
       </div>

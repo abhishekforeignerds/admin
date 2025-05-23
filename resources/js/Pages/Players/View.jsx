@@ -13,6 +13,7 @@ import { filterOptions, filterByDate } from '@/Components/FilterUtils';
 import Pagination from '@/Components/Pagination';
 
 export default function View({ users, allusers }) {
+    console.log(users, 'users')
     const [search, setSearch] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState(search);
     const { flash = {} } = usePage().props;
@@ -172,50 +173,52 @@ export default function View({ users, allusers }) {
                             <table className="min-w-full bg-white">
                                 <thead>
                                     <tr>
-                                        <th className="px-2 py-3 border-b text-red text-left text-sm">First Name</th>
-                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Last Name</th>
-                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Country</th>
+                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Name</th>
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Phone</th>
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Email Address</th>
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Username</th>
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Points</th>
-                                        <th className="px-2 py-3 border-b text-red text-left text-sm">New User</th>
+                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Type</th>
+                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Ticket</th>
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {currentClients.map((user) => (
                                         <tr key={user.id}>
-                                            <td className="px-2 py-3 border-b text-sm font-bold">{user.first_name}</td>
-                                            <td className="px-2 py-3 border-b text-sm">{user.last_name}</td>
-                                            <td className="px-2 py-3 border-b text-sm">{user.country}</td>
+                                            <td className="px-2 py-3 border-b text-sm font-bold">{user.first_name} {user.last_name}</td>
                                             <td className="px-2 py-3 border-b text-sm">{user.phone}</td>
                                             <td className="px-2 py-3 border-b text-sm">{user.email}</td>
                                             <td className="px-2 py-3 border-b text-sm">{user.username}</td>
                                             <td className="px-2 py-3 border-b text-sm">{user.points}</td>
-                                            {/* New Users Column: show Yes if created in last 7 days, otherwise No */}
+
+                                            <td className="px-2 py-3 border-b text-sm">{user.type}</td>
                                             <td className="px-2 py-3 border-b text-sm">
-                                                {user.created_at && isNewUser(user.created_at) ? 'Yes' : 'No'}
+
+                                                <Link href={route('players.suspend', user.id)} className={`px-2 py-1 rounded text-xs font-medium block hover:underline ${getStatusClass(user.status)}`}>{getStatusText(user.status)}</Link>
                                             </td>
-                                            <td className="px-2 py-3 border-b text-sm relative">
+                                            <td className="px-2 py-3 border-b text-sm">{user.type == 'desktop' && (
                                                 <Link
-                                                    className="text-right bg-red px-8 py-2 rounded-md text-white block max-w-max ml-auto mb-4"
-                                                    href={route('players.addfund', user.id)}
-                                                >
-                                                    Add Fund
-                                                </Link>
-                                                <Link
-                                                    className="text-right bg-red px-8 py-2 rounded-md text-white block max-w-max ml-auto mb-4"
-                                                    href={route('players.createticket', user.id)}
-                                                >
-                                                    Create Ticket
-                                                </Link>
-                                                <Link
-                                                    className="text-right bg-red px-8 py-2 rounded-md text-white block max-w-max ml-auto mb-4"
+                                                    className="bg-red px-3 py-1 rounded-md text-white text-xs"
                                                     href={route('players.viewticket', user.id)}
                                                 >
                                                     View Ticket
                                                 </Link>
+                                            )}</td>
+                                            {/* <td className="px-2 py-3 border-b text-sm">
+                                                {user.created_at && isNewUser(user.created_at) ? 'Yes' : 'No'}
+                                            </td> */}
+                                            <td className="px-2 py-3 border-b text-sm relative">
+                                                {user.type != 'desktop' && (
+                                                    <Link
+                                                        className="text-right bg-red px-8 py-2 rounded-md text-white block max-w-max ml-auto mb-4"
+                                                        href={route('players.addfund', user.id)}
+                                                    >
+                                                        Add Fund
+                                                    </Link>
+                                                )}
+
+
                                                 <button
                                                     type="button"
                                                     className="flex justify-center items-center size-9 text-sm font-semibold rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50"

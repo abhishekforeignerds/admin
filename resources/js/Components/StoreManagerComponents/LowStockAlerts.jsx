@@ -116,7 +116,7 @@ const LowStockAlerts = ({ lowStockRawMaterialstable = [], lowStockFinishGoodtabl
 
     const [selectedMaterial, setSelectedMaterial] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState("all"); // Default: All Time
+    const [selectedFilter, setSelectedFilter] = useState("today"); // Default: All Time
 
     const handleRequestStock = (material) => {
         setSelectedMaterial(material);

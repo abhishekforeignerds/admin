@@ -28,18 +28,95 @@ const CardLayout = ({ img, title, description, numberInfo, bgColor, statusInfo, 
 const DashboardStateGrid = ({ statusCounts = {} }) => {
   const { auth } = usePage().props;
   const userRoles = auth?.user?.roles || [];
+  const userall = auth?.user?.userall || 0;
+  const Admincommission = auth.user.commission || 0;
+  console.log(userall[0].pan_card, 'userall')
+  console.log(Admincommission, 'Admincommission')
+
+  let totalcommissionper = ((statusCounts.totalBetToday / 10) * (Admincommission / 10)).toFixed(2);
+  totalcommissionper = parseFloat(totalcommissionper);
+
+  let netpoints = (statusCounts.totalBetToday - statusCounts.totalWinToday - totalcommissionper).toFixed(2);
+  netpoints = parseFloat(netpoints);
+
 
   // Define role-based dashboard cards
   const roleBasedCards = {
+
     "Super Admin": [
+
+      {
+        img: img2,
+        title: "Today's Sale",
+        description: "",
+        numberInfo: statusCounts.totalBetToday || 0,
+        bgColor: "#D2E0FF",
+        statusInfo: "",
+        // link: route("games.index"),
+      },
+      {
+        img: img3,
+        title: "Today's Claim",
+        description: "",
+        numberInfo: statusCounts.totalClaimToday || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        // link: route("inventory.index"),
+      },
+      {
+        img: img3,
+        title: "Today's Wins",
+        description: "",
+        numberInfo: statusCounts.totalWinToday || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        // link: route("inventory.index"),
+      },
+
+      {
+        img: img3,
+        title: "Today Commission",
+        description: "",
+        numberInfo: totalcommissionper || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        // link: route("inventory.index"),
+      },
+      {
+        img: img3,
+        title: "Net Points",
+        description: "",
+        numberInfo: netpoints || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        // link: route("inventory.index"),
+      },
+      {
+        img: img3,
+        title: "Balance",
+        description: "",
+        numberInfo: userall[0].pan_card || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        // link: route("inventory.index"),
+      },
+      {
+        img: img1,
+        title: "Today added Games",
+        description: "",
+        numberInfo: statusCounts.gamestoday || 0,
+        bgColor: "#E4FFD2",
+        statusInfo: "",
+        link: route("games.index"),
+      },
       {
         img: img4,
-        title: "All Players",
+        title: "Today Players",
         description: "",
-        numberInfo: statusCounts.normalUsers || 0,
+        numberInfo: statusCounts.playersToday || 0,
         bgColor: "#FFEFEF",
         statusInfo: "",
-        link: route("plants.index"),
+        link: route("players.index"),
       },
       {
         img: img1,
@@ -48,7 +125,7 @@ const DashboardStateGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.games || 0,
         bgColor: "#E4FFD2",
         statusInfo: "",
-        link: route("client-purchase-orders.index"),
+        link: route("games.index"),
       },
       {
         img: img2,
@@ -57,7 +134,7 @@ const DashboardStateGrid = ({ statusCounts = {} }) => {
         numberInfo: statusCounts.totalBet || 0,
         bgColor: "#D2E0FF",
         statusInfo: "",
-        link: route("games.index"),
+        // link: route("games.index"),
       },
       {
         img: img3,
@@ -65,9 +142,268 @@ const DashboardStateGrid = ({ statusCounts = {} }) => {
         description: "",
         numberInfo: statusCounts.totalWin || 0,
         bgColor: "#D9D2FF",
-        statusInfo: "Orders in Progress",
-        link: route("inventory.index"),
+        statusInfo: "",
+        // link: route("inventory.index"),
       },
+
+      {
+        img: img4,
+        title: "All Players",
+        description: "",
+        numberInfo: statusCounts.normalUsers || 0,
+        bgColor: "#FFEFEF",
+        statusInfo: "",
+        link: route("players.index"),
+      },
+
+    ],
+    "Stockit": [
+
+      {
+        img: img2,
+        title: "Today's Sale",
+        description: "",
+        numberInfo: statusCounts.totalSaleToday || 0,
+        bgColor: "#D2E0FF",
+        statusInfo: "",
+        // link: route("games.index"),
+      },
+      {
+        img: img3,
+        title: "Today's Claim",
+        description: "",
+        numberInfo: statusCounts.totalClaimToday || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        // link: route("inventory.index"),
+      },
+      {
+        img: img3,
+        title: "Today's Wins",
+        description: "",
+        numberInfo: statusCounts.totalWinToday || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        // link: route("inventory.index"),
+      },
+
+      {
+        img: img3,
+        title: "Today Commission",
+        description: "",
+        numberInfo: totalcommissionper || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        // link: route("inventory.index"),
+      },
+
+      {
+        img: img4,
+        title: "Today Players",
+        description: "",
+        numberInfo: statusCounts.playersToday || 0,
+        bgColor: "#FFEFEF",
+        statusInfo: "",
+        link: route("players.index"),
+      },
+      {
+        img: img3,
+        title: "Net Points",
+        description: "",
+        numberInfo: netpoints || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        // link: route("inventory.index"),
+      },
+      {
+        img: img3,
+        title: "Balance",
+        description: "",
+        numberInfo: userall[0].pan_card || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        // link: route("inventory.index"),
+      },
+      {
+        img: img1,
+        title: "Today added Games",
+        description: "",
+        numberInfo: statusCounts.gamestoday || 0,
+        bgColor: "#E4FFD2",
+        statusInfo: "",
+        link: route("games.index"),
+      },
+      {
+        img: img1,
+        title: "Total Games",
+        description: "",
+        numberInfo: statusCounts.games || 0,
+        bgColor: "#E4FFD2",
+        statusInfo: "",
+        link: route("games.index"),
+      },
+      {
+        img: img2,
+        title: "Total Bets",
+        description: "",
+        numberInfo: statusCounts.totalBet || 0,
+        bgColor: "#D2E0FF",
+        statusInfo: "",
+        // link: route("games.index"),
+      },
+      {
+        img: img3,
+        title: "Total User Wins",
+        description: "",
+        numberInfo: statusCounts.totalWin || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        // link: route("inventory.index"),
+      },
+
+      {
+        img: img4,
+        title: "All Players",
+        description: "",
+        numberInfo: statusCounts.normalUsers || 0,
+        bgColor: "#FFEFEF",
+        statusInfo: "",
+        link: route("players.index"),
+      },
+
+    ],
+    "Retailer": [
+
+      {
+        img: img2,
+        title: "Today Sale points",
+        description: "",
+        numberInfo: statusCounts.totalBetToday || 0,
+        bgColor: "#D2E0FF",
+        statusInfo: "",
+        link: route("retailer.playergameResults"),
+      },
+      {
+        img: img3,
+        title: "Today Win Points",
+        description: "",
+        numberInfo: statusCounts.totalWinToday || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        link: route("retailer.playergameResults"),
+      },
+      {
+        img: img3,
+        title: "Today Average Bet",
+        description: "",
+        numberInfo: (statusCounts.totalBetToday / statusCounts.normalUsers) || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        link: route("retailer.playerhistory"),
+      },
+      {
+        img: img3,
+        title: "Today Players",
+        description: "",
+        numberInfo: statusCounts.playersToday || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        link: route("players.index"),
+      },
+      {
+        img: img3,
+        title: "Today Claim",
+        description: "",
+        numberInfo: statusCounts.totalClaimToday || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        link: route("players.index"),
+      },
+      {
+        img: img3,
+        title: "Today Unclaim",
+        description: "",
+        numberInfo: statusCounts.todayUnclaim || 0,
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        link: route("players.index"),
+      },
+
+      {
+        img: img3,
+        title: "View Players",
+        description: "",
+        numberInfo: '',
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        link: route("retailer.playerhistory"),
+      },
+      {
+        img: img3,
+        title: "Turnover Report",
+        description: "",
+        numberInfo: '',
+        bgColor: "#D9D2FF",
+        statusInfo: "",
+        link: route("retailer.turnoverHistory"),
+      },
+      // {
+      //   img: img1,
+      //   title: "Today added Games",
+      //   description: "",
+      //   numberInfo: statusCounts.gamestoday || 0,
+      //   bgColor: "#E4FFD2",
+      //   statusInfo: "",
+      //   link: route("games.index"),
+      // },
+
+      // {
+      //   img: img4,
+      //   title: "Today Players",
+      //   description: "",
+      //   numberInfo: statusCounts.playersToday || 0,
+      //   bgColor: "#FFEFEF",
+      //   statusInfo: "",
+      //   link: route("players.index"),
+      // },
+      // {
+      //   img: img1,
+      //   title: "Total Games",
+      //   description: "",
+      //   numberInfo: statusCounts.games || 0,
+      //   bgColor: "#E4FFD2",
+      //   statusInfo: "",
+      //   link: route("games.index"),
+      // },
+      // {
+      //   img: img2,
+      //   title: "Total Bets",
+      //   description: "",
+      //   numberInfo: statusCounts.totalBet || 0,
+      //   bgColor: "#D2E0FF",
+      //   statusInfo: "",
+      //   // link: route("games.index"),
+      // },
+      // {
+      //   img: img3,
+      //   title: "Total User Wins",
+      //   description: "",
+      //   numberInfo: statusCounts.totalWin || 0,
+      //   bgColor: "#D9D2FF",
+      //   statusInfo: "",
+      //   // link: route("inventory.index"),
+      // },
+
+      // {
+      //   img: img4,
+      //   title: "All Players",
+      //   description: "",
+      //   numberInfo: statusCounts.normalUsers || 0,
+      //   bgColor: "#FFEFEF",
+      //   statusInfo: "",
+      //   link: route("players.index"),
+      // },
+
     ],
 
   };

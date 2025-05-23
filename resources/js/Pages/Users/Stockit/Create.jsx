@@ -12,8 +12,8 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
         mobile_number: '',
         role: 'Stockit',
         plant_id: '',
-        pan_card: '',
-        gstin_number: '',
+        balance: '',
+        commission_percentage: '',
         sub_admin_id: '',
         stockit_id: '',
     })
@@ -32,11 +32,11 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Create User
+                    Create Stockit
                 </h2>
             }
         >
-            <Head title="Create User" />
+            <Head title="Create Stockit" />
             <div className="main-content-container sm:ml-52">
                 <div className="mx-auto py-6 flex justify-between flex-col md:flex-row gap-2">
                     <p className="flex">
@@ -44,7 +44,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                         <FiChevronRight size={24} color="black" />
                         <Link href={route('stockit.index')}>Users Management</Link>
                         <FiChevronRight size={24} color="black" />
-                        <span className="text-red">Create User</span>
+                        <span className="text-red">Create Stockit</span>
                     </p>
                     <Link href={route('stockit.index')} className="border border-red py-1 px-14 text-red rounded max-w-max">
                         Back
@@ -54,7 +54,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900  min-h-[80vh]">
                             <div className="top-search-bar-box flex py-4">
-                                <h2 className="font-semibold text-3xl mb-6">Create New User</h2>
+                                <h2 className="font-semibold text-3xl mb-6">Create New Stockit</h2>
                             </div>
                             <form onSubmit={handleSubmit} className="styled-form">
                                 <div className="theme-style-form grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -105,13 +105,13 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                                     )}
                                     {data.role === 'Retailer' && (
                                         <div className="mb-4" hidden>
-                                            <label className="block text-gray-700">Select Stockit User*</label>
+                                            <label className="block text-gray-700">Select Stockit Stockit*</label>
                                             <select
                                                 value={data.stockit_id}
                                                 onChange={(e) => setData('stockit_id', e.target.value)}
                                                 className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
                                             >
-                                                <option value="">Select Stockit User</option>
+                                                <option value="">Select Stockit Stockit</option>
                                                 {stockitUsers.map((user) => (
                                                     <option key={user.id} value={user.id}>
                                                         {user.name}
@@ -145,7 +145,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
                                         >
                                             <option value="">Select Status</option>
-                                            <option value="pending_approval">Pending</option>
+                                            {/* <option value="pending_approval">Pending</option> */}
                                             <option value="active">Active</option>
                                             <option value="inactive">Inactive</option>
                                         </select>
@@ -188,23 +188,23 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                                         <label className="block text-gray-700">Commission Percentage*</label>
                                         <input
                                             type="text"
-                                            value={data.gstin_number}
-                                            onChange={(e) => setData('gstin_number', e.target.value)}
+                                            value={data.commission_percentage}
+                                            onChange={(e) => setData('commission_percentage', e.target.value)}
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
                                             placeholder="Enter Commission Percentage"
                                         />
-                                        {errors.gstin_number && <div className="text-errorRed text-sm">{errors.gstin_number}</div>}
+                                        {errors.commission_percentage && <div className="text-errorRed text-sm">{errors.commission_percentage}</div>}
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-gray-700">Balance*</label>
                                         <input
                                             type="text"
-                                            value={data.pan_card}
-                                            onChange={(e) => setData('pan_card', e.target.value)}
+                                            value={data.balance}
+                                            onChange={(e) => setData('balance', e.target.value)}
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
                                             placeholder="Enter Balance"
                                         />
-                                        {errors.pan_card && <div className="text-errorRed text-sm">{errors.pan_card}</div>}
+                                        {errors.balance && <div className="text-errorRed text-sm">{errors.balance}</div>}
                                     </div>
                                 </div>
                                 <div>
@@ -213,7 +213,7 @@ export default function Create({ message, roles, plants, subAdmins, stockitUsers
                                         disabled={processing}
                                         className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-red-800"
                                     >
-                                        Create User
+                                        Create Stockit
                                     </button>
                                 </div>
                             </form>

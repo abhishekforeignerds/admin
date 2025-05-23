@@ -7,6 +7,8 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\FGProduction;
 use App\Models\PurchaseOrder;
+use App\Models\UserPointsSale;
+use App\Models\UserPointsClaim;
 use App\Models\VendorPurchaseOrder;
 use App\Models\OrderedItem;
 use App\Models\RawMaterial;
@@ -22,6 +24,7 @@ use App\Models\User;
 use App\Models\Users;
 use App\Models\Game;
 use App\Models\GameResults;
+use App\Models\ClaimPointData;
 
 use Carbon\Carbon;
 
@@ -34,16 +37,54 @@ class DashboardController extends Controller
         $allowedRoles = ['Super Admin', 'Manager Imports', 'Client'];
         $hasAllowed = count(array_intersect($roles, $allowedRoles)) > 0;
         
-        $plants =  Plant::all();
+        
         $notifications = Notification::orderBy('created_at', 'desc')->limit(4)->get();
         $notificationscount = Notification::where('status', 'unread')->count();
 
+        if ($roles[0] === 'Retailer') {
+            $currentPlayers = Users::where('retailer_id', auth()->id())->pluck('id');
+        } elseif ($roles[0] === 'Stockit') {
+            $currentPlayers = Users::where('stockit_id', auth()->id())->pluck('id');
+        } else { // Super Admin
+            $currentPlayers = Users::where('sub_admin_id', auth()->id())->pluck('id');
+        }
+
         $currentUser = User::where('id', auth()->id())->first();
-        $normalUsers = Users::all()->count();
+        $players = Users::whereIn('id', $currentPlayers)->count();
+        $playersToday = Users::whereIn('id', $currentPlayers)->whereDate('created_at', Carbon::today())->count();
+
         $games = Game::all()->count();
-        $totalBet = GameResults::sum('bet');
-        $totalWin = GameResults::sum('win_value');
-        $gameResults = GameResults::with(['client', 'games'])->get()->groupBy('game_id');
+        $gamestoday = Game::whereDate('created_at', Carbon::today())->count();
+
+        $totalBet = ClaimPointData::whereIn('user_id', $currentPlayers)->sum('balance');
+        $totalWin = GameResults::whereIn('user_id', $currentPlayers)->sum('win_value');
+
+
+
+        $totalBetToday = ClaimPointData::whereDate('created_at', Carbon::today())->whereIn('user_id', $currentPlayers)->sum('balance');
+   
+    
+        $totalWinToday = GameResults::whereDate('created_at', Carbon::today())->whereIn('user_id', $currentPlayers)->sum('win_value');
+
+        $totalSaleToday = UserPointsSale::whereDate('created_at', Carbon::today())->sum('amount');
+
+        $totalClaimToday = ClaimPointData::whereDate('created_at', Carbon::today())->whereIn('user_id', $currentPlayers)->sum('claim_point');
+            $todayUnclaim = ClaimPointData::whereDate('created_at', Carbon::today())->whereIn('user_id', $currentPlayers)->sum('unclaim_point');
+
+        if ($roles[0] == 'Retailer') {
+            $currentPlayers = Users::where('retailer_id', auth()->id())->pluck('id');
+        } elseif ($roles[0] == 'Stockit') {
+            $currentPlayers = Users::where('stockit_id', auth()->id())->pluck('id');
+        } elseif ($roles[0] == 'Super Admin') {
+            $currentPlayers = Users::where('sub_admin_id', auth()->id())->pluck('id');
+        }
+        
+        $gameResults = GameResults::with(['client.retailer', 'games'])
+        ->whereIn('user_id', $currentPlayers)
+        ->get()
+        ->groupBy('game_id');
+    
+        
         // $results = GameResult::with('user')->get()->groupBy('game_id');
 
         $plant_id = $currentUser->plant_assigned;
@@ -223,10 +264,17 @@ class DashboardController extends Controller
             'currentpendingVendorpurchaseOrders'=> $currentpendingVendorpurchaseOrders,
             'currentcancelledVendorOrders'=> $currentcancelledVendorOrders,
             'currentInvoiceVendorpurchaseOrderscount'=> $currentInvoiceVendorpurchaseOrderscount,
-            'normalUsers'=> $normalUsers,
+            'normalUsers'=> $players,
             'games'=> $games,
             'totalBet'=> $totalBet,
             'totalWin'=> $totalWin,
+            'playersToday'=> $playersToday,
+            'gamestoday'=> $gamestoday,
+            'totalBetToday'=> $totalBetToday,
+            'totalWinToday'=> $totalWinToday,
+            'totalSaleToday'=> $totalSaleToday,
+            'totalClaimToday'=> $totalClaimToday,
+            'todayUnclaim'=> $todayUnclaim,
             
         ]
         

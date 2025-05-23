@@ -68,16 +68,12 @@ class StockitController extends Controller
             ],
             'status'          => 'required|string',
             'company_name'    => 'nullable|string',
-            'gstin_number'    => 'nullable|string',
-            'pan_card'        => 'nullable|string',
+            'commission_percentage'    => 'required|integer|min:0|max:10',
+            'balance'        => 'required|integer|min:100',
             'state_code'      => 'nullable|string',
             'plant_id'        => ['nullable','integer','exists:plants,id'],
             'company_address' => 'nullable|string',
-            // New field: how much to seed/transfer
-            'pan_card'          => [
-                Rule::requiredIf(in_array($request->role, ['Super Admin','Stockit','Retailer'])),
-                'numeric','min:1'
-            ],
+
             // If Stockit, require the sub_admin_id
             'sub_admin_id'    => [
                 Rule::requiredIf($request->role === 'Stockit'),
@@ -90,7 +86,7 @@ class StockitController extends Controller
             ],
         ]);
 
-        try {
+
             DB::transaction(function() use ($validated) {
                 // 2) Create user with zero balance
                 $user = User::create([
@@ -100,7 +96,7 @@ class StockitController extends Controller
                     'mobile_number'   => $validated['mobile_number'],
                     'status'          => $validated['status'],
                     'company_name'    => $validated['company_name']   ?? null,
-                    'gstin_number'    => $validated['gstin_number']   ?? null,
+                    'gstin_number'    => $validated['commission_percentage']   ?? null,
                     'pan_card'        => 0,    // start at zero
                     'state_code'      => $validated['state_code']     ?? null,
                     'plant_assigned'  => $validated['plant_id']       ?? null,
@@ -110,16 +106,24 @@ class StockitController extends Controller
 
                 // Assign role
                 $user->syncRoles($validated['role']);
-                $amount = $validated['pan_card'];
+                $amount = $validated['balance'];
 
                 // 3a) Sub Admin creation: funds come from the lone Super Admin
                 if ($validated['role'] === 'Super Admin') {
                     $super = User::role('Super Admin')->sole();
                     if ($super->pan_card < $amount) {
                         throw new \Exception('Low Balance');
+                    } else {
+                        Fund::create([
+                            'from_id' => $super->id,
+                            'user_id' => $user->id, // <-- corrected
+                            'amount' => $amount,
+                           'reference_number' => $validated['reference_number'] ?? rand(1000000000, 9999999999),
+                        ]);
+                        $user->increment('pan_card', $amount);
+                        $super->decrement('pan_card', $amount);
                     }
-                    $user->increment('pan_card', $amount);
-                    $super->decrement('pan_card', $amount);
+               
                 }
 
                 // 3b) Stockit creation: funds come from selected Sub Admin
@@ -127,9 +131,17 @@ class StockitController extends Controller
                     $sub = User::findOrFail($validated['sub_admin_id']);
                     if ($sub->pan_card < $amount) {
                         throw new \Exception('Low Balance');
-                    }
+                    } else {
+                          Fund::create([
+                            'from_id' => $sub->id,
+                            'user_id' => $user->id, // <-- corrected
+                            'amount' => $amount,
+                            'reference_number' => $validated['reference_number'] ?? rand(1000000000, 9999999999),
+                        ]);
+                        
                     $user->increment('pan_card', $amount);
                     $sub->decrement('pan_card', $amount);
+                    }
                 }
 
                 // 3c) Retailer creation: funds come from selected Stockit
@@ -137,22 +149,41 @@ class StockitController extends Controller
                     $stk = User::findOrFail($validated['stockit_id']);
                     if ($stk->pan_card < $amount) {
                         throw new \Exception('Low Balance');
+                    } else {
+                        Fund::create([
+                            'from_id' => $stk->id,
+                            'user_id' => $user->id, // <-- corrected
+                            'amount' => $amount,
+                            'reference_number' => $validated['reference_number'] ?? rand(1000000000, 9999999999),
+                        ]);
+                        $user->increment('pan_card', $amount);
+                        $stk->decrement('pan_card', $amount);
                     }
-                    $user->increment('pan_card', $amount);
-                    $stk->decrement('pan_card', $amount);
+                  
                 }
             });
-        } catch (\Exception $e) {
-            // Rollback has already occurred; show message
-            return redirect()
-                ->route('users.index')
-                ->with('success', $e->getMessage());
-        }
+ 
 
     
 
         return redirect()
-            ->route('users.index')
+            ->route('stockit.index')
             ->with('success', 'User created successfully.');
     }
+
+    public function suspend($id)
+{
+    $user = User::findOrFail($id);
+
+    // Toggle status
+    $newStatus = $user->status === 'active' ? 'inactive' : 'active';
+
+    $user->update([
+        'status' => $newStatus,
+    ]);
+
+
+
+    return redirect()->back()->with('success', 'Stockist status updated to ' . $newStatus . '.');
+}
 }

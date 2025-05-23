@@ -17,7 +17,7 @@ const RecentOrdersStatus = ({ purchaseorderstable = [] }) => {
     // Modal state
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState("all"); // Default: All Time
+    const [selectedFilter, setSelectedFilter] = useState("today"); // Default: All Time
 
     const openModal = (order) => {
         setSelectedOrder(order);

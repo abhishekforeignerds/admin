@@ -73,11 +73,7 @@ class SubadminController extends Controller
             'state_code'      => 'nullable|string',
             'plant_id'        => ['nullable','integer','exists:plants,id'],
             'company_address' => 'nullable|string',
-            // New field: how much to seed/transfer
-            'pan_card'          => [
-                Rule::requiredIf(in_array($request->role, ['Super Admin','Stockit','Retailer'])),
-                'numeric','min:1'
-            ],
+
             // If Stockit, require the sub_admin_id
             'sub_admin_id'    => [
                 Rule::requiredIf($request->role === 'Stockit'),
@@ -90,7 +86,6 @@ class SubadminController extends Controller
             ],
         ]);
 
-        try {
             DB::transaction(function() use ($validated) {
                 // 2) Create user with zero balance
                 $user = User::create([
@@ -116,9 +111,17 @@ class SubadminController extends Controller
                     $super = User::role('Super Admin')->sole();
                     if ($super->pan_card < $amount) {
                         throw new \Exception('Low Balance');
+                    } else {
+                        Fund::create([
+                            'from_id' => $super->id,
+                            'user_id' => $user->id, // <-- corrected
+                            'amount' => $amount,
+                            'reference_number' => $validated['reference_number'] ?? rand(1000000000, 9999999999),
+                        ]);
+                        $user->increment('pan_card', $amount);
+                        $super->decrement('pan_card', $amount);
                     }
-                    $user->increment('pan_card', $amount);
-                    $super->decrement('pan_card', $amount);
+              
                 }
 
                 // 3b) Stockit creation: funds come from selected Sub Admin
@@ -126,9 +129,17 @@ class SubadminController extends Controller
                     $sub = User::findOrFail($validated['sub_admin_id']);
                     if ($sub->pan_card < $amount) {
                         throw new \Exception('Low Balance');
+                    } else {
+                        Fund::create([
+                            'from_id' => $sub->id,
+                            'user_id' => $user->id, // <-- corrected
+                            'amount' => $amount,
+                            'reference_number' => $validated['reference_number'] ?? rand(1000000000, 9999999999),
+                        ]);
+                        $user->increment('pan_card', $amount);
+                        $sub->decrement('pan_card', $amount);
                     }
-                    $user->increment('pan_card', $amount);
-                    $sub->decrement('pan_card', $amount);
+            
                 }
 
                 // 3c) Retailer creation: funds come from selected Stockit
@@ -136,17 +147,20 @@ class SubadminController extends Controller
                     $stk = User::findOrFail($validated['stockit_id']);
                     if ($stk->pan_card < $amount) {
                         throw new \Exception('Low Balance');
-                    }
+                    } else {
+                        Fund::create([
+                            'from_id' => $stk->id,
+                            'user_id' => $user->id, // <-- corrected
+                            'amount' => $amount,
+                            'reference_number' => $validated['reference_number'] ?? rand(1000000000, 9999999999),
+                        ]);
+                        
                     $user->increment('pan_card', $amount);
                     $stk->decrement('pan_card', $amount);
+                    }
                 }
             });
-        } catch (\Exception $e) {
-            // Rollback has already occurred; show message
-            return redirect()
-                ->route('users.index')
-                ->with('success', $e->getMessage());
-        }
+
 
  
 

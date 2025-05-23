@@ -67,6 +67,10 @@ export const getStatusText = (status) => {
     if (status === "production_initiated") return "Production Initiated";
     if (status === "adminapproved") return "Admin Approved";
     if (status === "plant_head_approved") return "Plant Head Approved";
+
+    if (status === "requested") return "Claim Requsted";
+    if (status === "claim-accepted") return "Claim Accepted";
+    if (status === "claimed") return "Claimed";
     return 'Unknown Status';
 };
 
@@ -74,13 +78,13 @@ export const getStatusClass = (status) => {
     switch (status) {
         // client
         case 'active':
-            return 'bg-lightShadeGreen text-green-600 text-green';
+            return 'bg-green text-white text-green';
         case 'pending_approval':
             return 'bg-lightYellow text-green-600 text-statusYellow';
         case 'pending_for_approval':
-            return 'bg-lightYellow text-green-600 text-statusYellow';
+            return 'bg-statusRed text-green-600 text-statusYellow';
         case 'inactive':
-            return 'bg-statusRed text-red-600 text-red';
+            return 'bg-red px-3 py-1 rounded-md text-white text-xs';
         // finish goods
         case 'available':
             return 'bg-lightShadeGreen text-green-600 text-green';

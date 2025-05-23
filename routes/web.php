@@ -67,7 +67,11 @@ Route::middleware(['auth', 'dynamic.permission'])->group(function () {
 });
 Route::middleware(['auth', 'dynamic.permission'])->group(function () {
     Route::resource('retailer', RetailerController::class);
-
+    Route::get('player-game-results', [RetailerController::class, 'playergameResults'])->name('retailer.playergameResults');
+    Route::get('turnover-history', [RetailerController::class, 'turnoverHistory'])->name('retailer.turnoverHistory');
+    Route::get('player-history', [RetailerController::class, 'playerhistory'])->name('retailer.playerhistory');
+    Route::get('transaction-history', [RetailerController::class, 'transactionHistory'])->name('retailer.transactionhistory');
+    Route::get('results-history', [RetailerController::class, 'resultsHistory'])->name('retailer.resultshistory');
     Route::get('retailer/{id}/view', [RetailerController::class, 'view'])->name('retailer.view');
     Route::get('retailer/{id}/suspend', [RetailerController::class, 'suspend'])->name('retailer.suspend');
     Route::get('retailer/{id}/addfund', [RetailerController::class, 'addfund'])->name('retailer.addfund');
@@ -177,6 +181,21 @@ Route::middleware(['auth', 'dynamic.permission'])->group(function () {
 });
 Route::get('players/{id}/viewticket', [ClientController::class, 'viewticket'])->name('players.viewticket');
 Route::put('players/{id}/storeticket', [ClientController::class, 'storeticket'])->name('players.storeticket');
+
+use App\Http\Controllers\UserPointsClaimController;
+use App\Http\Controllers\ReportsManagementController;
+    // Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'dynamic.permission'])->group(function () {
+    Route::resource('claims', UserPointsClaimController::class);
+ 
+});
+Route::post('/claims/{id}/accept', [UserPointsClaimController::class, 'accept'])->name('claims.accept');
+Route::post('/claims/{id}/reject', [UserPointsClaimController::class, 'reject'])->name('claims.reject');
+
+Route::get('/report/admin-report', [ReportsManagementController::class, 'adminReport'])->name('report.admin');
+Route::get('/report/retailer-report', [ReportsManagementController::class, 'retailerReport'])->name('report.retilaer');
+Route::get('/report/stockit-report', [ReportsManagementController::class, 'stockitReport'])->name('report.stockit');
+
 use App\Http\Controllers\VendorController;
     // Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'dynamic.permission'])->group(function () {

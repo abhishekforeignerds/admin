@@ -51,4 +51,17 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Plant::class, 'plant_assigned', 'id');
     }
+
+    public function subAdmin()
+    {
+        return $this->belongsTo(User::class, 'sub_admin_id');
+    }
+
+    /**
+     * The user who is this user’s stockit.
+     */
+    public function stockit()
+    {
+        return $this->belongsTo(User::class, 'stockit_id');
+    }
 }

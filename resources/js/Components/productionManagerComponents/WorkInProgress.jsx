@@ -3,7 +3,7 @@ import { getStatusClass } from "../../../utils/statusUtils";
 import { filterOptions, filterByDate } from "@/Components/FilterUtils";
 
 const WorkInProgressTable = ({ productionsOrders = [] }) => {
-    const [selectedFilter, setSelectedFilter] = useState("all");
+    const [selectedFilter, setSelectedFilter] = useState("today");
 
     // Filter orders based on the selected time range
     const filteredOrders = useMemo(() => {

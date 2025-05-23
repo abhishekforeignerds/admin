@@ -140,9 +140,9 @@ export default function View({ users, statusCounts }) {
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Email Address</th>
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Commission %</th>
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Mobile</th>
-                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Status</th>
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Balance</th>
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Device</th>
+                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Status</th>
                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Actions</th>
                                     </tr>
                                 </thead>
@@ -159,11 +159,6 @@ export default function View({ users, statusCounts }) {
                                                 <td className="px-2 py-3 border-b text-sm">{user.gstin_number || 0}%</td>
                                                 <td className="px-2 py-3 border-b text-sm">{user.mobile_number || 'N/A'}</td>
                                                 <td className="px-2 py-3 border-b text-sm">
-                                                    <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusClass(user.status)}`}>
-                                                        {getStatusText(user.status)}
-                                                    </span>
-                                                </td>
-                                                <td className="px-2 py-3 border-b text-sm">
                                                     {(Number(user.pan_card) || 0).toLocaleString('en-IN')}
                                                 </td>
                                                 <td className="px-2 py-3 border-b text-sm">
@@ -172,20 +167,27 @@ export default function View({ users, statusCounts }) {
                                                         : 'N/A'}
 
                                                 </td>
+                                                <td className="px-2 py-3 border-b text-sm">
+
+                                                    <Link href={route('retailer.suspend', user.id)} className={`px-2 py-1 rounded text-xs font-medium block hover:underline ${getStatusClass(user.status)}`}>{getStatusText(user.status)}</Link>
+                                                </td>
                                                 <td className="px-2 py-3 border-b text-sm relative">
-                                                    {userPermissions.includes('view users') && (
-                                                        <Link className="bg-red px-3 py-1 rounded-md text-white text-xs" href={route('retailer.addfund', user.id)}>
-                                                            Add Fund
-                                                        </Link>
-                                                    )}
+
+                                                    <Link className="bg-red px-3 py-1 rounded-md text-white text-xs" href={route('users.addfund', user.id)}>
+                                                        Add Fund
+                                                    </Link>
+
                                                     <button onClick={() => toggleDropdown(user.email)} className="ml-2">
                                                         <FiMoreVertical />
                                                     </button>
                                                     {openDropdown === user.email && (
-                                                        <div className="absolute right-0 mt-2 bg-slate-200 shadow-md rounded-lg p-2" onMouseLeave={closeDropdown}>
-                                                            <Link href={route('retailer.edit', user.id)} className="block hover:underline">Edit</Link>
-                                                            <Link href={route('retailer.view', user.id)} className="block hover:underline">View</Link>
-                                                            <Link href={route('retailer.suspend', user.id)} className="block hover:underline">Suspend</Link>
+                                                        <div
+                                                            className="absolute right-0 mt-2 bg-slate-200 shadow-md rounded-lg p-2 z-[9999]"
+                                                            onMouseLeave={closeDropdown}
+                                                        >
+                                                            <Link href={route('users.edit', user.id)} className="block hover:underline">Edit</Link>
+                                                            <Link href={route('users.view', user.id)} className="block hover:underline">View</Link>
+                                                            <Link href={route('users.suspend', user.id)} className="block hover:underline">Suspend</Link>
                                                         </div>
                                                     )}
                                                 </td>

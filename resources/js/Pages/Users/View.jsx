@@ -95,12 +95,12 @@ export default function View({ users, statusCounts }) {
                         />
                     </div>
 
-                    <Link
+                    {/* <Link
                         className="text-right bg-red px-8 py-2 rounded-md text-white block max-w-max ml-auto mb-4"
                         href={route('users.create')}
                     >
                         Create Users
-                    </Link>
+                    </Link> */}
 
                     {/* Flash Message */}
                     {showFlash && flash.success && (
@@ -156,7 +156,9 @@ export default function View({ users, statusCounts }) {
                                                 <thead>
                                                     <tr>
                                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Full Name</th>
-                                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Email Address</th>
+                                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Sub‑Admin</th>
+                                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Stockit</th>
+                                                        <th className="px-2 py-3 border-b text-red text-left text-sm">Email</th>
                                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Commission %</th>
                                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Mobile</th>
                                                         <th className="px-2 py-3 border-b text-red text-left text-sm">Status</th>
@@ -167,7 +169,14 @@ export default function View({ users, statusCounts }) {
                                                 <tbody>
                                                     {usersForRole.map(user => (
                                                         <tr key={user.id}>
+                                                            {console.log(user, 'user')}
                                                             <td className="px-2 py-3 border-b text-sm font-semibold">{user.name}</td>
+                                                            <td className="px-2 py-3 border-b text-sm">
+                                                                {user.sub_admin ? user.sub_admin.name : '—'}
+                                                            </td>
+                                                            <td className="px-2 py-3 border-b text-sm">
+                                                                {user.stockit ? user.stockit.name : '—'}
+                                                            </td>
                                                             <td className="px-2 py-3 border-b text-sm">{user.email}</td>
                                                             <td className="px-2 py-3 border-b text-sm">{user.gstin_number || 0}%</td>
                                                             <td className="px-2 py-3 border-b text-sm">{user.mobile_number || 'N/A'}</td>
@@ -179,36 +188,8 @@ export default function View({ users, statusCounts }) {
                                                             <td className="px-2 py-3 border-b text-sm">
                                                                 {(Number(user.pan_card) || 0).toLocaleString('en-IN')}
                                                             </td>
-                                                            <td className="px-2 py-3 border-b text-sm relative">
-                                                                {userPermissions.includes('view users') && (
-                                                                    <Link
-                                                                        className="bg-red px-3 py-1 rounded-md text-white text-xs"
-                                                                        href={route('users.addfund', user.id)}
-                                                                    >
-                                                                        Add Fund
-                                                                    </Link>
-                                                                )}
-                                                                <button onClick={() => toggleDropdown(user.email)} className="ml-2">
-                                                                    <FiMoreVertical />
-                                                                </button>
-                                                                {openDropdown === user.email && (
-                                                                    <div
-                                                                        className="absolute right-0 mt-2 bg-slate-200 shadow-md rounded-lg p-2"
-                                                                        onMouseLeave={closeDropdown}
-                                                                    >
-                                                                        <Link href={route('users.edit', user.id)} className="block hover:underline">
-                                                                            Edit
-                                                                        </Link>
-                                                                        <Link href={route('users.view', user.id)} className="block hover:underline">
-                                                                            View
-                                                                        </Link>
-                                                                        {!user.roles.map(r => r.name).includes('Super Admin') && (
-                                                                            <Link href={route('users.suspend', user.id)} className="block hover:underline">
-                                                                                Suspend
-                                                                            </Link>
-                                                                        )}
-                                                                    </div>
-                                                                )}
+                                                            <td className="px-2 py-3 border-b text-sm">
+                                                                {/* … your Add Fund / Edit buttons … */}
                                                             </td>
                                                         </tr>
                                                     ))}

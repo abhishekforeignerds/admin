@@ -25,10 +25,30 @@ class ClientController extends Controller
     public function index(Request $request)
     {
     
-        $users = Users::all();
-        $allusers = Users::count();;
+        $user  = auth()->user();
+        $roles = $user->roles->pluck('name')->toArray();
+    
+        if ($roles[0] === 'Retailer') {
+            $currentPlayers = Users::where('retailer_id', auth()->id())->pluck('id');
+        } elseif ($roles[0] === 'Stockit') {
+            $currentPlayers = Users::where('stockit_id', auth()->id())->pluck('id');
+        } else { // Super Admin
+            $currentPlayers = Users::where('sub_admin_id', auth()->id())->pluck('id');
+        }
 
-        return Inertia::render('Players/View', ['users' => $users, 'allusers' => $allusers,
+        $users = Users::whereIn('id', $currentPlayers)->get();
+        $retailers = User::role('Retailer')->pluck('company_name', 'id'); // [id => company_name]
+
+        $users = $users->map(function ($user) use ($retailers) {
+            $companyName = $retailers[$user->retailer_id] ?? null;
+
+            $user->type = (strtolower(trim($companyName)) === 'desktop') ? 'desktop' : 'phone';
+            return $user;
+        });
+
+        $allusers = Users::whereIn('id', $currentPlayers)->count();
+
+        return Inertia::render('Players/View', ['users' => $users, 'allusers' => $allusers,'retailers' => $retailers
         ]);
     }
 
@@ -36,8 +56,19 @@ class ClientController extends Controller
     {
         $roles = Role::all();
         $plants =  Plant::where('status', 'active')->get();
-        
-        return Inertia::render('Players/Create', ['roles' => $roles, 'plants' => $plants, 'retailerUsers'  => User::get(['id','name','pan_card']),]);
+        $user  = auth()->user();
+        $roles = $user->roles->pluck('name')->toArray();
+
+
+        if ($roles[0] === 'Retailer') {
+            $retailerUsers = User::role('Retailer')->where('stockit_id', auth()->id())->get(['id','name','pan_card']);
+        } elseif ($roles[0] === 'Stockit') {
+            $retailerUsers = User::role('Retailer')->where('stockit_id', auth()->id())->get(['id','name','pan_card']);
+        } else { // Super Admin
+            $retailerUsers = User::role('Retailer')->get(['id','name','pan_card']);
+        }
+
+        return Inertia::render('Players/Create', ['roles' => $roles, 'plants' => $plants, 'retailerUsers'  => $retailerUsers,]);
     }
 
     public function store(Request $request)
@@ -156,14 +187,14 @@ class ClientController extends Controller
         $user = Users::findOrFail($id);
         $sub = User::findOrFail($user->stockit_id);
         if ($sub->pan_card < $user->points) {
-            return redirect()->route('players.index')
+            return redirect()->back('players.index')
        ->with('success', 'You are on Low Balance.');
         }
         $user->update([
             'points' => $user->points + $request->amount,
         ]);
 
-        $sub->decrement('pan_card', $validated['points']);
+        $sub->decrement('pan_card', $request->amount);
        // Redirect to a valid Inertia route with a flash message.
        return redirect()->route('players.index')
        ->with('success', 'Fund entry created successfully.');
@@ -243,18 +274,21 @@ class ClientController extends Controller
         return redirect()->route('players.index')->with('success', 'Client updated successfully.');
     }
     public function suspend($id)
-    {
-        // Find the user by ID or fail if not found
-        $user = User::findOrFail($id);
+{
+    $user = Users::findOrFail($id);
 
-        // Update the user's status to 'inactive'
-        $user->update([
-            'status' => 'inactive',
-        ]);
+    // Toggle status
+    $newStatus = $user->status === 'active' ? 'inactive' : 'active';
+//     echo '<pre>';
+// print_r($newStatus);die;
+    $user->update([
+        'status' => $newStatus,
+    ]);
 
-        // Redirect back with a success message
-        return redirect()->route('players.index')->with('success', 'Client suspended successfully.');
-    }
+
+
+    return redirect()->back()->with('success', 'Player status updated to ' . $newStatus . '.');
+}
 
     public function createticket($id)
     {
@@ -273,7 +307,7 @@ class ClientController extends Controller
         $now    = Carbon::now()->format('YmdHis');
         $amt    = $validated['amount'];
         $card   = Str::upper(Str::substr($validated['card_name'], 0, 3));
-        $serial = "{$now}-{$amt}-{$card}-U{$id}-R" . auth()->id();
+        $serial = "{$now}{$amt}{$card}{$id}".auth()->id();
     
         // create the ticket record
         $ticket = Ticket::create([
@@ -303,7 +337,7 @@ class ClientController extends Controller
         // update the ticket with the path
         $ticket->update(['bar_code_scanner' =>  '/barcodes/'.$filename]);
     
-        return response()->json(['success' => true, 'ticket' => $ticket]);
+        return redirect()->route('players.index')->with('success', 'Ticket Created successfully.');
     }
     public function viewticket(Request $request, $id)
     {

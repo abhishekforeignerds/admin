@@ -54,9 +54,9 @@ class FinishedGoodController extends Controller
 
 
         $data = $request->all();
-        $data['game_spin_time'] = $request->material_code;
-        $data['min_bet'] = $request->material_name;
-        $data['maximum_bet'] = $request->hsn_sac_code;
+        $data['game_spin_time'] = $request->game_spin_time;
+        $data['min_bet'] = $request->min_bet;
+        $data['maximum_bet'] = $request->maximum_bet;
 
         Game::create($data);
        

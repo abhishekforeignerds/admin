@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Fund extends Model
 {
-    protected $fillable = ['user_id', 'amount', 'reference_number'];
+    protected $fillable = ['from_id', 'user_id', 'amount', 'reference_number'];
 }

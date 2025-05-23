@@ -787,8 +787,7 @@ export default function View({ purchaseOrder, orderedItems, plantDetails, plantf
 
                             />
 
-                            {// console.log('availabilityStatus')}
-                                {// console.log(availabilityStatus)}
+
 
                             {(availabilityStatus == 'all_unavailable' || availabilityStatus == 'all_available') && (
                                 <StatusUpdateForm

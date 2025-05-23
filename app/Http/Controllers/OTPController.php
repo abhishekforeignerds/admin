@@ -81,7 +81,7 @@ class OTPController extends Controller
            
 
             // Check if the user has 'pending' or 'inactive' status
-            if ($user->status === 'pending_approval ' || $user->status === 'inactive') {
+            if ($user->status === 'pending_approval' || $user->status === 'inactive') {
                 Auth::logout();
         
                 return redirect()->route('login')->withErrors([

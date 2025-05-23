@@ -5,7 +5,7 @@ import { Link } from '@inertiajs/react';
 import { FiChevronRight } from 'react-icons/fi';
 
 export default function Create(retailerUsers, retailer) {
-    console.log('retailer', retailer)
+    // console.log('retailer', retailer)
     const { auth } = usePage().props; // Get user data from Inertia
     const userRoles = auth?.user?.roles || [];
     const [activeTab, setActiveTab] = useState("All");
@@ -67,9 +67,7 @@ export default function Create(retailerUsers, retailer) {
                 <div className="mx-auto py-6">
                     <div className="bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 min-h-[80vh]">
-                            <div className="top-search-bar-box flex py-4">
-                                <h2 className="font-semibold text-3xl mb-6">Your Balance : {balance}</h2>
-                            </div>
+
                             <div className="top-search-bar-box flex py-4">
                                 <h2 className="font-semibold text-3xl mb-6">Add Player</h2>
                             </div>
@@ -103,13 +101,13 @@ export default function Create(retailerUsers, retailer) {
                                         userRoles[0] != 'Retailer' && (
 
                                             <div className="mb-4">
-                                                <label className="block text-gray-700">Select Stockit User*</label>
+                                                <label className="block text-gray-700">Select Retailer *</label>
                                                 <select
                                                     value={data.retailer_id}
                                                     onChange={(e) => setData('retailer_id', e.target.value)}
                                                     className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
                                                 >
-                                                    <option value="">Select Stockit User</option>
+                                                    <option value="">Select Retailer User</option>
                                                     {retailerUsers.retailerUsers.map((user) => (
                                                         <option key={user.id} value={user.id}>
                                                             {user.name}
@@ -186,6 +184,7 @@ export default function Create(retailerUsers, retailer) {
                                         <label className="block text-gray-700">Points*</label>
                                         <input
                                             type="number"
+                                            max={balance}
                                             value={data.points}
                                             onChange={(e) => setData('points', e.target.value)}
                                             className="w-full mt-1 border-gray-300 rounded-md shadow-sm"
@@ -196,8 +195,8 @@ export default function Create(retailerUsers, retailer) {
                                     {/* Winning Percentage */}
                                     {userPermissions.includes("winningpercentage players") && (
                                         <div className="mb-4">
-                                            <label className="block text-gray-700">Winning Percentage*</label>
-                                            <input
+                                            {/* <label className="block text-gray-700">Winning Percentage*</label> */}
+                                            <input hidden
                                                 type="number"
                                                 step="0.01"
                                                 value={data.winning_percentage}
@@ -211,8 +210,8 @@ export default function Create(retailerUsers, retailer) {
                                     {/* Override Chance */}
                                     {userPermissions.includes("overidechance players") && (
                                         <div className="mb-4">
-                                            <label className="block text-gray-700">Override Chance*</label>
-                                            <input
+                                            {/* <label className="block text-gray-700">Override Chance*</label> */}
+                                            <input hidden
                                                 type="number"
                                                 step="0.01"
                                                 value={data.override_chance}

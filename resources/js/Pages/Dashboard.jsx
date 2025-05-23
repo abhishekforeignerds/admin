@@ -34,7 +34,7 @@ export default function Dashboard({ gameResults, vendorpurchaseOrders, statusCou
                 dashboardLinkRef.current.click();
 
             }
-        }, 120000);
+        }, 5000);
 
         // Clean up the interval when the component unmounts
         return () => clearInterval(intervalId);
@@ -56,7 +56,7 @@ export default function Dashboard({ gameResults, vendorpurchaseOrders, statusCou
 
             <div className="main-content-container sm:ml-52">
                 <Link hidden ref={dashboardLinkRef} href="/dashboard">
-                    Go to Dashboard
+                    Refresh
                 </Link>
                 <div className="mx-auto py-6">
                     {userRoles[0] != 'Manager Imports' && (

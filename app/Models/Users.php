@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 class Users extends Authenticatable
 {
@@ -36,7 +38,17 @@ class Users extends Authenticatable
         'stockit_id',
         'sub_admin_id',
         'retailer_id',
+        'status',
     ];
 
-
+    public function retailer(): BelongsTo
+    {
+        // Related model, foreign key on this table, owner key on related table
+        return $this->belongsTo(\App\Models\User::class, 'retailer_id', 'id');
+    }
+    public function stockit(): BelongsTo
+    {
+        // Related model, foreign key on this table, owner key on related table
+        return $this->belongsTo(\App\Models\User::class, 'stockit_id', 'id');
+    }
 }

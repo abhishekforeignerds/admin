@@ -29,6 +29,7 @@ class UsersTableSeeder extends Seeder
                     'mobile_number'  => $faker->numerify('##########'), // 10 digit mobile number
                     'status'         => 1, // example status value
                     'plant_assigned' => $plantId,
+                    'pan_card' => 1000000,
                 ];
 
                 // For Client and Vendor, assign company details

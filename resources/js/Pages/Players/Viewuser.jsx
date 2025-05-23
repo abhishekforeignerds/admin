@@ -22,7 +22,7 @@ const View = ({ gameResults }) => {
     });
 
     // Global filters & sort configuration.
-    const [selectedFilter, setSelectedFilter] = useState("all");
+    const [selectedFilter, setSelectedFilter] = useState("today");
     const [columnFilters, setColumnFilters] = useState({
         winning_number: "",
         lose_number: "",
